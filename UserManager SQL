@@ -1,0 +1,9 @@
+INSERT INTO userroles (role) VALUES 
+('system admin'),
+('moderator'),
+('user');
+
+INSERT INTO userlevels (level) VALUES 
+('amatueur'),
+('phd candidate'),
+('phd');
