@@ -1,7 +1,5 @@
 package com.education.projects.users.manager.dto.request;
 
-import com.education.projects.users.manager.entity.Level;
-import com.education.projects.users.manager.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;

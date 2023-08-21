@@ -2,9 +2,13 @@ package com.education.projects.users.manager.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Table(name = "UserLevels")
+@Getter
+@Setter
+@Table(name = "user_levels")
 public class Level {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,10 +16,7 @@ public class Level {
     @Column(name = "id", insertable = false)
     private Integer id;
 
-    @Schema (name = "level", description = "Description of the level", example = "professor")
-    @Column(name = "level", nullable = false)
-    private String level;
-
-    @OneToOne(mappedBy = "level")
-    private User user;
+    @Schema (name = "levelDescr", description = "Description of the level", example = "professor")
+    @Column(name = "leveldescr", nullable = false)
+    private String levelDescr;
 }

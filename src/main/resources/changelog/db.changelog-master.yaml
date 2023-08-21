@@ -4,7 +4,7 @@ databaseChangeLog:
       author: ART
       changes:
         - createTable:
-            tableName: userlevels
+            tableName: user_levels
             columns:
               - column:
                   name: id
@@ -14,12 +14,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: level
+                  name: leveldescr
                   type: varchar
                   constraints:
                     nullable: false
         - createTable:
-            tableName: userroles
+            tableName: user_roles
             columns:
               - column:
                   name: id
@@ -29,7 +29,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: role
+                  name: roledescr
                   type: varchar
                   constraints:
                     nullable: false
@@ -74,14 +74,14 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: role_id
-                    references: userroles(id)
+                    references: user_roles(id)
               - column:
                   name: level_id
                   type: int
                   constraints:
                     nullable: false
                     foreignKeyName: level_id
-                    references: userlevels(id)
+                    references: user_levels(id)
               - column:
                   name: created_at
                   type: timestamp

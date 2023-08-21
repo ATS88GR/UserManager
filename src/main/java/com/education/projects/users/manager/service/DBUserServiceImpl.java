@@ -6,10 +6,7 @@ import com.education.projects.users.manager.entity.User;
 import com.education.projects.users.manager.entity.UserPage;
 import com.education.projects.users.manager.entity.UserSearchCriteria;
 import com.education.projects.users.manager.mapper.UserMapper;
-import com.education.projects.users.manager.repository.UserCriteriaRepository;
-import com.education.projects.users.manager.repository.UserRepository;
-import com.education.projects.users.manager.repository.UserSpecification;
-import com.education.projects.users.manager.repository.SearchCriteria;
+import com.education.projects.users.manager.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +24,10 @@ public class DBUserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private LevelServiceImpl levelServiceImpl;
+    @Autowired
+    private RoleServiceImpl roleServiceImpl;
+    @Autowired
     private UserCriteriaRepository userCriteriaRepository;
     @Autowired
     private UserMapper userMapper;
@@ -40,8 +41,15 @@ public class DBUserServiceImpl implements UserService {
      */
     public UserDtoResp createUser(UserDtoReq userDtoReq) throws Exception {
         try {
-            return userMapper.userToUserDto(
-                    userRepository.save(userMapper.userDtoToUser(userDtoReq)));
+            User user = userMapper.userDtoToUser(userDtoReq);
+            user.setLevel(levelServiceImpl.getLevelById(userDtoReq.getLevelId()));
+            user.setRole(roleServiceImpl.getRoleById(userDtoReq.getRoleId()));
+
+            UserDtoResp userDtoResp = userMapper.userToUserDto(
+                    userRepository.save(user));
+            userDtoResp.setLevelId(user.getLevel().getId());
+            userDtoResp.setRoleId(user.getRole().getId());
+            return userDtoResp;
         }catch (Exception e){
             log.error("Error: {}", e.getMessage());
             throw new Exception(e.getMessage());

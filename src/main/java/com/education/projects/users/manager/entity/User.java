@@ -1,10 +1,15 @@
 package com.education.projects.users.manager.entity;
 
+import com.education.projects.users.manager.service.LevelServiceImpl;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -20,6 +25,11 @@ public class User {
             this.createdAt = Timestamp.valueOf(LocalDateTime.now());
         else
             this.modificationAt = Timestamp.valueOf(LocalDateTime.now());
+        /*try {
+            this.level = levelServiceImpl.getLevelById();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }*/
     }
 
     @Id
@@ -47,14 +57,6 @@ public class User {
     @Schema (name = "phone", description = "User phone number", example = "+375334455667")
     @Column(name = "phone", nullable = false)
     private String phone;
-
-    /*@Schema (name = "roleId", description = "User role", example = "2")
-    @Column(name = "role_id", nullable = false)
-    private Integer roleId;
-
-    @Schema (name = "levelId", description = "User level", example = "3")
-    @Column(name = "level_id", nullable = false)
-    private Integer levelId;*/
 
     @Schema (name = "createdAt", description = "User creation date", example = "2014-04-28T16:25:49.341")
     @Column(name = "created_at", nullable = false)
