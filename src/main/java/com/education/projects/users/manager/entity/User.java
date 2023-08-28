@@ -1,15 +1,10 @@
 package com.education.projects.users.manager.entity;
 
-import com.education.projects.users.manager.service.LevelServiceImpl;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -25,11 +20,6 @@ public class User {
             this.createdAt = Timestamp.valueOf(LocalDateTime.now());
         else
             this.modificationAt = Timestamp.valueOf(LocalDateTime.now());
-        /*try {
-            this.level = levelServiceImpl.getLevelById();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }*/
     }
 
     @Id

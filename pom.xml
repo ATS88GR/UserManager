@@ -9,7 +9,7 @@
         <version>3.1.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.education.projects.cars.manager.carsmanager</groupId>
+    <groupId>com.education.projects.users.manager.usersmanager</groupId>
     <artifactId>spring-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>usersManager</name>
@@ -108,6 +108,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <imageName>
+                        artsyom88/spring-boot-user-manager:0.0.1-SNAPSHOT
+                    </imageName>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.liquibase</groupId>

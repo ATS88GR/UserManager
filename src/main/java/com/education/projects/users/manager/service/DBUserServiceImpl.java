@@ -68,8 +68,14 @@ public class DBUserServiceImpl implements UserService {
         try {
             if (userRepository.existsById(id)) {
                 User userToChange = userMapper.userDtoToUser(userDtoReq);
+                userToChange.setLevel(levelServiceImpl.getLevelById(userDtoReq.getLevelId()));
+                userToChange.setRole(roleServiceImpl.getRoleById(userDtoReq.getRoleId()));
                 userToChange.setId(id);
-                return userMapper.userToUserDto(userRepository.save(userToChange));
+                UserDtoResp userDtoResp = userMapper.userToUserDto(
+                        userRepository.save(userToChange));
+                userDtoResp.setLevelId(userToChange.getLevel().getId());
+                userDtoResp.setRoleId(userToChange.getRole().getId());
+                return userDtoResp;
             } else {
                 Exception e = new Exception("The user wasn't found");
                 log.error("Error: {}", e.getMessage());
