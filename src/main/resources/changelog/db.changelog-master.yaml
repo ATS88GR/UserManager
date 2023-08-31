@@ -8,14 +8,15 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
+                  defaultValueComputed: gen_random_uuid()
                   constraints:
                     primaryKey: true
                     nullable: false
+                    unique: true
               - column:
                   name: leveldescr
-                  type: varchar
+                  type: varchar(32)
                   constraints:
                     nullable: false
         - createTable:
@@ -23,14 +24,16 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
+                  defaultValueComputed: gen_random_uuid()
                   constraints:
+                    #default: uuid_generate_v1mc()
                     primaryKey: true
                     nullable: false
+                    unique: true
               - column:
                   name: roledescr
-                  type: varchar
+                  type: varchar(32)
                   constraints:
                     nullable: false
         - createTable:
@@ -38,24 +41,25 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
+                  defaultValueComputed: gen_random_uuid()
                   constraints:
                     primaryKey: true
                     nullable: false
+                    unique: true
               - column:
                   name: firstname
-                  type: varchar(50)
+                  type: varchar(32)
                   constraints:
                     nullable: false
               - column:
                   name: lastname
-                  type: varchar(50)
+                  type: varchar(32)
                   constraints:
                     nullable: false
               - column:
                   name: password
-                  type: varchar(50)
+                  type: varchar(32)
                   constraints:
                     nullable: false
               - column:
@@ -65,28 +69,30 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: phone
-                  type: varchar(50)
+                  type: varchar(32)
                   constraints:
                     nullable: false
               - column:
                   name: role_id
-                  type: int
+                  type: uuid
                   constraints:
                     nullable: false
                     foreignKeyName: role_id
                     references: user_roles(id)
               - column:
                   name: level_id
-                  type: int
+                  type: uuid
                   constraints:
                     nullable: false
                     foreignKeyName: level_id
                     references: user_levels(id)
               - column:
                   name: created_at
-                  type: timestamp
+                  type: timestamp with time zone
+                  defaultValue: now()
                   constraints:
                     nullable: false
               - column:
                   name: modification_at
-                  type: timestamp
+                  type: timestamp with time zone
+                  defaultValue: now()

@@ -1,6 +1,6 @@
 package com.education.projects.users.manager.repository;
 
-import com.education.projects.users.manager.dto.response.UserDtoResp;
+import com.education.projects.users.manager.response.dto.UserDtoResp;
 import com.education.projects.users.manager.entity.User;
 import com.education.projects.users.manager.entity.UserPage;
 import com.education.projects.users.manager.entity.UserSearchCriteria;

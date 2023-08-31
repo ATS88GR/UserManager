@@ -1,6 +1,6 @@
 package com.education.projects.users.manager.controller;
 
-import com.education.projects.users.manager.dto.response.RoleDtoResp;
+import com.education.projects.users.manager.response.dto.RoleDtoResp;
 import com.education.projects.users.manager.service.RoleServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RestController
 @Validated
@@ -37,7 +38,7 @@ public class RoleController {
     @GetMapping("/roles")
     public ResponseEntity<Collection<RoleDtoResp>> getRoles() throws Exception {
         log.info("Get all roles info");
-        return new ResponseEntity <> (roleServiceImpl.getAllRoles(), HttpStatus.OK);
+        return new ResponseEntity<>(roleServiceImpl.getAllRoles(), HttpStatus.OK);
     }
 
     @Operation(summary = "Gets role by id",
@@ -49,9 +50,9 @@ public class RoleController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/roles/{id}")
-    public ResponseEntity<RoleDtoResp> getRoleById(@PathVariable("id") @NotNull @Min(1) Integer id)
-            throws Exception{
+    public ResponseEntity<RoleDtoResp> getRoleById(@PathVariable("id") @NotNull @Min(1) UUID id)
+            throws Exception {
         log.info("Gets role with id = {}", id);
-        return new ResponseEntity <> (roleServiceImpl.getRoleDtoById(id), HttpStatus.OK);
+        return new ResponseEntity<>(roleServiceImpl.getRoleDtoById(id), HttpStatus.OK);
     }
 }

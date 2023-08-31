@@ -1,6 +1,6 @@
 package com.education.projects.users.manager.controller;
 
-import com.education.projects.users.manager.dto.response.LevelDtoResp;
+import com.education.projects.users.manager.response.dto.LevelDtoResp;
 import com.education.projects.users.manager.service.LevelServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RestController
 @Validated
@@ -37,7 +38,7 @@ public class LevelController {
     @GetMapping("/levels")
     public ResponseEntity<Collection<LevelDtoResp>> getLevels() throws Exception {
         log.info("Get all levels info");
-        return new ResponseEntity <> (levelServiceImpl.getAllLevels(), HttpStatus.OK);
+        return new ResponseEntity<>(levelServiceImpl.getAllLevels(), HttpStatus.OK);
     }
 
     @Operation(summary = "Gets level by id",
@@ -49,9 +50,9 @@ public class LevelController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/levels/{id}")
-    public ResponseEntity<LevelDtoResp> getLevelById(@PathVariable("id") @NotNull @Min(1) Integer id)
-            throws Exception{
+    public ResponseEntity<LevelDtoResp> getLevelById(@PathVariable("id") @NotNull @Min(1) UUID id)
+            throws Exception {
         log.info("Gets level with id = {}", id);
-        return new ResponseEntity <> (levelServiceImpl.getLevelDtoById(id), HttpStatus.OK);
+        return new ResponseEntity<>(levelServiceImpl.getLevelDtoById(id), HttpStatus.OK);
     }
 }

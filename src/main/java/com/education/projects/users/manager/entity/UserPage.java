@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Sort;
+
 @Getter
 @Setter
 public class UserPage {
@@ -27,7 +28,7 @@ public class UserPage {
 
     @NotBlank
     @Schema(name = "sortBy",
-            description = "Sorting by firstName/lastName/roleId/levelId/createdAt/modificationAt",
+            description = "Sorting by firstName/lastName/roleId/levelId",
             example = "lastName")
-    private String sortBy = "brand";
+    private String sortBy = "lastname";
 }

@@ -1,14 +1,19 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.dto.response.RoleDtoResp;
+import com.education.projects.users.manager.response.dto.RoleDtoResp;
 import com.education.projects.users.manager.entity.Role;
 import com.education.projects.users.manager.mapper.RoleMapper;
 import com.education.projects.users.manager.repository.RoleRepository;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.UUID;
+
 @Service
 @Slf4j
 public class RoleServiceImpl {
@@ -38,7 +43,7 @@ public class RoleServiceImpl {
      * @return The Role object from database
      * @throws Exception
      */
-    public RoleDtoResp getRoleDtoById(Integer id) throws Exception {
+    public RoleDtoResp getRoleDtoById(UUID id) throws Exception {
         try {
             if (roleRepository.existsById(id))
                 return roleMapper.roleToRoleDto(roleRepository.getReferenceById(id));
@@ -53,7 +58,7 @@ public class RoleServiceImpl {
         }
     }
 
-    public Role getRoleById(Integer id) throws Exception {
+    public Role getRoleById(UUID id) throws Exception {
         try {
             if (roleRepository.existsById(id))
                 return roleRepository.getReferenceById(id);

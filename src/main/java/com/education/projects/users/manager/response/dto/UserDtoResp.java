@@ -1,15 +1,18 @@
-package com.education.projects.users.manager.dto.response;
+package com.education.projects.users.manager.response.dto;
 
+import  com.education.projects.users.manager.entity.Role;
+import  com.education.projects.users.manager.entity.Level;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.UUID;
 
 @Data
 public class UserDtoResp {
 
-    @Schema(name = "id", description = "User id", example = "1")
-    private Integer Id;
+    @Schema(name = "id", description = "User id", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
+    private UUID Id;
 
     @Schema (name = "firstName", description = "User firstname", example = "John")
     private String firstName;
@@ -26,15 +29,15 @@ public class UserDtoResp {
     @Schema (name = "phone", description = "User phone number", example = "+375334455667")
     private String phone;
 
-    @Schema (name = "roleId", description = "User role", example = "2")
-    private Integer roleId;
+    @Schema (name = "roleId", description = "User role", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
+    private Role role;
 
-    @Schema (name = "levelId", description = "User level", example = "3")
-    private Integer levelId;
+    @Schema (name = "levelId", description = "User level", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
+    private Level level;
 
     @Schema (name = "createdAt", description = "User creation date", example = "2017-05-14T10:34")
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     @Schema (name = "modificationAt", description = "User modification date", example = "2017-05-14T10:34")
-    private LocalDateTime modificationAt;
+    private Timestamp modificationAt;
 }

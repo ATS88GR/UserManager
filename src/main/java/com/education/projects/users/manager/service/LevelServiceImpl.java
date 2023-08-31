@@ -1,6 +1,6 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.dto.response.LevelDtoResp;
+import com.education.projects.users.manager.response.dto.LevelDtoResp;
 import com.education.projects.users.manager.entity.Level;
 import com.education.projects.users.manager.mapper.LevelMapper;
 import com.education.projects.users.manager.repository.LevelRepository;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -39,7 +40,7 @@ public class LevelServiceImpl implements LevelService {
      * @return The Level object from database
      * @throws Exception
      */
-    public LevelDtoResp getLevelDtoById(Integer id) throws Exception {
+    public LevelDtoResp getLevelDtoById(UUID id) throws Exception {
         try {
             if (levelRepository.existsById(id))
                 return levelMapper.levelToLevelDto(levelRepository.getReferenceById(id));
@@ -54,7 +55,7 @@ public class LevelServiceImpl implements LevelService {
         }
     }
 
-    public Level getLevelById(Integer id) throws Exception {
+    public Level getLevelById(UUID id) throws Exception {
         try {
             if (levelRepository.existsById(id))
                 return levelRepository.getReferenceById(id);

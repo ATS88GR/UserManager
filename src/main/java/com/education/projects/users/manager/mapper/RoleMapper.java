@@ -1,9 +1,8 @@
 package com.education.projects.users.manager.mapper;
 
-import com.education.projects.users.manager.dto.response.RoleDtoResp;
+import com.education.projects.users.manager.response.dto.RoleDtoResp;
 import com.education.projects.users.manager.entity.Role;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

@@ -1,8 +1,10 @@
-package com.education.projects.users.manager.dto.request;
+package com.education.projects.users.manager.request.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Data
 public class UserDtoReq {
@@ -32,15 +34,11 @@ public class UserDtoReq {
     @Size(min = 7, max = 20, message = "20 characters max")
     private String phone;
 
-    @Schema (name = "roleId", description = "User role", example = "2")
+    @Schema (name = "roleId", description = "User role", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
     @NotNull (message = "RoleId should not be empty")
-    @Positive (message = "RoleId should be positive")
-    @Digits(integer = 2, fraction = 0, message = "integer number of not more than 2 characters")
-    private Integer roleId;
+    private UUID roleId;
 
-    @Schema (name = "levelId", description = "User level", example = "3")
+    @Schema (name = "levelId", description = "User level", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
     @NotNull (message = "LevelId should not be empty")
-    @Positive (message = "LevelId should be positive")
-    @Digits(integer = 2, fraction = 0, message = "integer number of not more than 2 characters")
-    private Integer levelId;
+    private UUID levelId;
 }

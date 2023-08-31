@@ -1,7 +1,8 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.dto.request.UserDtoReq;
-import com.education.projects.users.manager.dto.response.UserDtoResp;
+import com.education.projects.users.manager.exception.UserNotFoundException;
+import com.education.projects.users.manager.request.dto.UserDtoReq;
+import com.education.projects.users.manager.response.dto.UserDtoResp;
 import com.education.projects.users.manager.entity.User;
 import com.education.projects.users.manager.entity.UserPage;
 import com.education.projects.users.manager.entity.UserSearchCriteria;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  * The class for service User information in database
@@ -40,51 +42,30 @@ public class DBUserServiceImpl implements UserService {
      * @throws Exception
      */
     public UserDtoResp createUser(UserDtoReq userDtoReq) throws Exception {
-        try {
-            User user = userMapper.userDtoToUser(userDtoReq);
-            user.setLevel(levelServiceImpl.getLevelById(userDtoReq.getLevelId()));
-            user.setRole(roleServiceImpl.getRoleById(userDtoReq.getRoleId()));
-
-            UserDtoResp userDtoResp = userMapper.userToUserDto(
-                    userRepository.save(user));
-            userDtoResp.setLevelId(user.getLevel().getId());
-            userDtoResp.setRoleId(user.getRole().getId());
-            return userDtoResp;
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+        User user = userMapper.userDtoToUser(userDtoReq,
+                roleServiceImpl.getRoleById(userDtoReq.getRoleId()),
+                levelServiceImpl.getLevelById(userDtoReq.getLevelId()));
+        return userMapper.userToUserDto(
+                userRepository.save(user));
     }
 
     /**
      * Updates the User object information by id with update user information
      *
      * @param userDtoReq User object information to update
-     * @param id  id of the user object to be updated
+     * @param id         id of the user object to be updated
      * @return User object information from database by id
      * @throws Exception
      */
-    public UserDtoResp updateUser(UserDtoReq userDtoReq, Integer id) throws Exception {
-        try {
-            if (userRepository.existsById(id)) {
-                User userToChange = userMapper.userDtoToUser(userDtoReq);
-                userToChange.setLevel(levelServiceImpl.getLevelById(userDtoReq.getLevelId()));
-                userToChange.setRole(roleServiceImpl.getRoleById(userDtoReq.getRoleId()));
-                userToChange.setId(id);
-                UserDtoResp userDtoResp = userMapper.userToUserDto(
-                        userRepository.save(userToChange));
-                userDtoResp.setLevelId(userToChange.getLevel().getId());
-                userDtoResp.setRoleId(userToChange.getRole().getId());
-                return userDtoResp;
-            } else {
-                Exception e = new Exception("The user wasn't found");
-                log.error("Error: {}", e.getMessage());
-                throw e;
-            }
-        }catch (Exception ex){
-            log.error("Error: {}", ex.getMessage());
-            throw new Exception(ex.getMessage());
-        }
+    public UserDtoResp updateUser(UserDtoReq userDtoReq, UUID id) throws Exception {
+        if (userRepository.existsById(id)) {
+            User userToChange = userMapper.userDtoToUser(userDtoReq,
+                    roleServiceImpl.getRoleById(userDtoReq.getRoleId()),
+                    levelServiceImpl.getLevelById(userDtoReq.getLevelId()));
+            userToChange.setId(id);
+            return userMapper.userToUserDto(
+                    userRepository.save(userToChange));
+        } else throw new UserNotFoundException(id);
     }
 
     /**
@@ -92,13 +73,8 @@ public class DBUserServiceImpl implements UserService {
      *
      * @return The list of the User objects
      */
-    public Collection<UserDtoResp> getAllUsers() throws Exception{
-        try {
-            return userMapper.userListToUserDtoList(userRepository.findAll());
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    public Collection<UserDtoResp> getAllUsers() {
+        return userMapper.userListToUserDtoList(userRepository.findAll());
     }
 
     /**
@@ -108,19 +84,10 @@ public class DBUserServiceImpl implements UserService {
      * @return The User object from database
      * @throws Exception
      */
-    public UserDtoResp getUserById(Integer id) throws Exception {
-        try {
-            if (userRepository.existsById(id))
-                return userMapper.userToUserDto(userRepository.getReferenceById(id));
-            else {
-                Exception e = new Exception("The user wasn't found");
-                log.error("Error: {}", e.getMessage());
-                throw e;
-            }
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    public UserDtoResp getUserById(UUID id) throws UserNotFoundException {
+        if (userRepository.existsById(id))
+            return userMapper.userToUserDto(userRepository.getReferenceById(id));
+        else throw new UserNotFoundException(id);
     }
 
     /**
@@ -128,50 +95,19 @@ public class DBUserServiceImpl implements UserService {
      *
      * @param id is a row in database
      */
-    public void deleteUserById(Integer id) throws Exception {
-        try {
-            if (userRepository.existsById(id))
-                userRepository.deleteById(id);
-            else {
-                Exception e = new Exception("The user wasn't found");
-                log.error("Error: {}", e.getMessage());
-                throw e;
-            }
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    public void deleteUserById(UUID id) throws UserNotFoundException {
+        if (userRepository.existsById(id))
+            userRepository.deleteById(id);
+        else throw new UserNotFoundException(id);
     }
 
     /**
-     * Sorts and filters Users objects information from database, returns list of User objects
-     *
-     * @param sortBy        Sets the sort order
-     * @param sortDirection Sets the sort direction (ACK/DESC)
-     * @param filter        The filter parameter, which need to parse
-     * @return The list of the User objects
-     * @throws Exception
+     * @param userPage           is a class with pagination settings
+     * @param userSearchCriteria is a class with search settings
+     * @return List of users with pagination and search settings
      */
-    public Collection<User> getSortedFilteredUsers(String sortBy, String sortDirection, String filter)
-            throws Exception {
-
-        String[] arrFilter = filter.split("\\.");
-        String key = arrFilter[1];
-        String value = arrFilter[2];
-        String operation = (arrFilter[0].equals("eq")) ? "= " : "!= ";
-
-        UserSpecification spec = new UserSpecification(new SearchCriteria(key, operation, value));
-        return userRepository.findAll(spec);
-    }
-
-    public Page<UserDtoResp> getSortedFilteredUsersCommon(UserPage userPage,
-                                  UserSearchCriteria userSearchCriteria)
-    throws Exception{
-        try {
-            return userCriteriaRepository.findAllWithFilters(userPage, userSearchCriteria);
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    public Page<UserDtoResp> getSortedFilteredUsersWithPagination(UserPage userPage,
+                                                                  UserSearchCriteria userSearchCriteria) {
+        return userCriteriaRepository.findAllWithFilters(userPage, userSearchCriteria);
     }
 }
