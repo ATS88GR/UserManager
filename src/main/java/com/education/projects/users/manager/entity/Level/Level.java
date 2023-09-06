@@ -1,4 +1,4 @@
-package com.education.projects.users.manager.entity;
+package com.education.projects.users.manager.entity.Level;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -18,7 +18,7 @@ public class Level {
     @Column(name = "id", insertable = false)
     private UUID id;
 
-    @Schema(name = "levelDescr", description = "Description of the level", example = "professor")
+    @Schema(name = "levelDescr", description = "Description of the user level", example = "phd")
     @Column(name = "leveldescr", nullable = false)
     private String levelDescr;
 }

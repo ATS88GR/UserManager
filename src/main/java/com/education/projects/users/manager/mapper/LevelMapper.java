@@ -1,7 +1,7 @@
 package com.education.projects.users.manager.mapper;
 
 import com.education.projects.users.manager.response.dto.LevelDtoResp;
-import com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.entity.Level.Level;
 import org.mapstruct.Mapper;
 
 import java.util.List;

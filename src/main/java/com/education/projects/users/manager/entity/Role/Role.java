@@ -1,4 +1,4 @@
-package com.education.projects.users.manager.entity;
+package com.education.projects.users.manager.entity.Role;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -19,7 +19,7 @@ public class Role {
     @Column(name = "id", insertable = false)
     private UUID id;
 
-    @Schema(name = "roleDescr", description = "Description of the role", example = "administrator")
+    @Schema(name = "roleDescr", description = "Description of the user role", example = "system admin")
     @Column(name = "roledescr", nullable = false)
     private String roleDescr;
 }

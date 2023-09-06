@@ -1,11 +1,12 @@
 package com.education.projects.users.manager.service;
 
+import com.education.projects.users.manager.exception.EmptyException;
 import com.education.projects.users.manager.exception.UserNotFoundException;
 import com.education.projects.users.manager.request.dto.UserDtoReq;
 import com.education.projects.users.manager.response.dto.UserDtoResp;
-import com.education.projects.users.manager.entity.User;
-import com.education.projects.users.manager.entity.UserPage;
-import com.education.projects.users.manager.entity.UserSearchCriteria;
+import com.education.projects.users.manager.entity.User.User;
+import com.education.projects.users.manager.entity.User.UserPage;
+import com.education.projects.users.manager.entity.User.UserSearchCriteria;
 import com.education.projects.users.manager.mapper.UserMapper;
 import com.education.projects.users.manager.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import java.util.UUID;
  */
 @Service
 @Slf4j
-public class DBUserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -63,9 +64,11 @@ public class DBUserServiceImpl implements UserService {
                     roleServiceImpl.getRoleById(userDtoReq.getRoleId()),
                     levelServiceImpl.getLevelById(userDtoReq.getLevelId()));
             userToChange.setId(id);
+            userToChange.setCreatedAt(userRepository.getReferenceById(id).getCreatedAt());
             return userMapper.userToUserDto(
                     userRepository.save(userToChange));
-        } else throw new UserNotFoundException(id);
+        }
+        throw new UserNotFoundException(id);
     }
 
     /**
@@ -73,8 +76,11 @@ public class DBUserServiceImpl implements UserService {
      *
      * @return The list of the User objects
      */
-    public Collection<UserDtoResp> getAllUsers() {
-        return userMapper.userListToUserDtoList(userRepository.findAll());
+    public Collection<UserDtoResp> getAllUsers() throws Exception{
+        Collection<UserDtoResp> userDtoRespList =
+                userMapper.userListToUserDtoList(userRepository.findAll());
+        if(userDtoRespList.isEmpty()) throw new EmptyException();
+        return userDtoRespList;
     }
 
     /**
@@ -84,10 +90,10 @@ public class DBUserServiceImpl implements UserService {
      * @return The User object from database
      * @throws Exception
      */
-    public UserDtoResp getUserById(UUID id) throws UserNotFoundException {
+    public UserDtoResp getUserById(UUID id) throws Exception {
         if (userRepository.existsById(id))
             return userMapper.userToUserDto(userRepository.getReferenceById(id));
-        else throw new UserNotFoundException(id);
+        throw new UserNotFoundException(id);
     }
 
     /**
@@ -95,7 +101,7 @@ public class DBUserServiceImpl implements UserService {
      *
      * @param id is a row in database
      */
-    public void deleteUserById(UUID id) throws UserNotFoundException {
+    public void deleteUserById(UUID id) throws Exception {
         if (userRepository.existsById(id))
             userRepository.deleteById(id);
         else throw new UserNotFoundException(id);
@@ -106,8 +112,12 @@ public class DBUserServiceImpl implements UserService {
      * @param userSearchCriteria is a class with search settings
      * @return List of users with pagination and search settings
      */
-    public Page<UserDtoResp> getSortedFilteredUsersWithPagination(UserPage userPage,
-                                                                  UserSearchCriteria userSearchCriteria) {
-        return userCriteriaRepository.findAllWithFilters(userPage, userSearchCriteria);
+    public Page<UserDtoResp> getSortFilterPaginUsers(UserPage userPage,
+                                                     UserSearchCriteria userSearchCriteria)
+            throws Exception{
+        Page<UserDtoResp> userDtoRespPage =
+                userCriteriaRepository.findAllWithFilters(userPage, userSearchCriteria);
+        if(userDtoRespPage.isEmpty()) throw new EmptyException();
+        return userDtoRespPage;
     }
 }

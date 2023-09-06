@@ -1,14 +1,17 @@
 package com.education.projects.users.manager.service;
 
+import com.education.projects.users.manager.entity.Role.RolePage;
+import com.education.projects.users.manager.entity.Role.RoleSearchCriteria;
+import com.education.projects.users.manager.exception.EmptyException;
+import com.education.projects.users.manager.exception.RoleNotFoundException;
+import com.education.projects.users.manager.repository.RoleCriteriaRepository;
 import com.education.projects.users.manager.response.dto.RoleDtoResp;
-import com.education.projects.users.manager.entity.Role;
+import com.education.projects.users.manager.entity.Role.Role;
 import com.education.projects.users.manager.mapper.RoleMapper;
 import com.education.projects.users.manager.repository.RoleRepository;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,60 +19,65 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class RoleServiceImpl {
+public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    RoleCriteriaRepository roleCriteriaRepository;
 
     /**
      * Gets all roles objects information from database
      *
      * @return The list of the Role objects
      */
-    public Collection<RoleDtoResp> getAllRoles() throws Exception{
-        try {
-            return roleMapper.roleListToRoleDtoList(roleRepository.findAll());
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    public Collection<RoleDtoResp> getAllRoles() throws Exception {
+        Collection<RoleDtoResp> roleDtoResp =
+                roleMapper.roleListToRoleDtoList(roleRepository.findAll());
+        if (roleDtoResp.isEmpty()) throw new EmptyException();
+        return roleDtoResp;
     }
 
     /**
-     * Gets the Role object information from the database by id
+     * Gets the Role DTO object information from the database by id
+     *
+     * @param id id of the role object in database
+     * @return The Role DTO object from database
+     * @throws RoleNotFoundException
+     */
+    public RoleDtoResp getRoleDtoById(UUID id) throws Exception {
+        if (roleRepository.existsById(id))
+            return roleMapper.roleToRoleDto(roleRepository.getReferenceById(id));
+        throw new RoleNotFoundException(id);
+    }
+
+    /**
+     * Gets the Role DTO object information from the database by id
      *
      * @param id id of the role object in database
      * @return The Role object from database
-     * @throws Exception
+     * @throws RoleNotFoundException
      */
-    public RoleDtoResp getRoleDtoById(UUID id) throws Exception {
-        try {
-            if (roleRepository.existsById(id))
-                return roleMapper.roleToRoleDto(roleRepository.getReferenceById(id));
-            else {
-                Exception e = new Exception("The role wasn't found");
-                log.error("Error: {}", e.getMessage());
-                throw e;
-            }
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    public Role getRoleById(UUID id) throws Exception {
+        if (roleRepository.existsById(id))
+            return roleRepository.getReferenceById(id);
+        throw new RoleNotFoundException(id);
     }
 
-    public Role getRoleById(UUID id) throws Exception {
-        try {
-            if (roleRepository.existsById(id))
-                return roleRepository.getReferenceById(id);
-            else {
-                Exception e = new Exception("The role wasn't found");
-                log.error("Error: {}", e.getMessage());
-                throw e;
-            }
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    /**
+     * Gets paginated list of Role DTO objects from the database
+     *
+     * @param rolePage           Role page parameters
+     * @param roleSearchCriteria criteria of role search
+     * @return sorted filtered List of Role DTO objects with pagination
+     */
+    public Page<RoleDtoResp> getSortFilterPaginRoles(RolePage rolePage,
+                                                     RoleSearchCriteria roleSearchCriteria)
+    throws Exception{
+        Page<RoleDtoResp> roleDtoResp =
+                roleCriteriaRepository.findAllWithFilters(rolePage, roleSearchCriteria);
+        if(roleDtoResp.isEmpty()) throw new EmptyException();
+        return roleDtoResp;
     }
 }

@@ -1,15 +1,17 @@
 package com.education.projects.users.manager.controller;
 
+import com.education.projects.users.manager.entity.Level.LevelPage;
+import com.education.projects.users.manager.entity.Level.LevelSearchCriteria;
 import com.education.projects.users.manager.response.dto.LevelDtoResp;
 import com.education.projects.users.manager.service.LevelServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +43,22 @@ public class LevelController {
         return new ResponseEntity<>(levelServiceImpl.getAllLevels(), HttpStatus.OK);
     }
 
+    @Operation(summary = "Gets sorted and filtered information about levels from database",
+            description = "Returns collection of level objects from database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Internal Server error")
+    })
+    @GetMapping("/sortedFilteredLevels")
+    public ResponseEntity<Page<LevelDtoResp>> getSortFilterLevelsWithPagination(LevelPage levelPage,
+                                                                              LevelSearchCriteria levelSearchCriteria)
+            throws Exception {
+        log.info("Get common sorted and filtered level info");
+        return new ResponseEntity<>(levelServiceImpl.getSortFilterPaginLevels(levelPage, levelSearchCriteria),
+                HttpStatus.OK);
+    }
+
     @Operation(summary = "Gets level by id",
             description = "Returns id level information from database")
     @ApiResponses(value = {
@@ -50,9 +68,10 @@ public class LevelController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/levels/{id}")
-    public ResponseEntity<LevelDtoResp> getLevelById(@PathVariable("id") @NotNull @Min(1) UUID id)
+    public ResponseEntity<LevelDtoResp> getLevelById(
+            @PathVariable("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
             throws Exception {
-        log.info("Gets level with id = {}", id);
+        log.info("Gets level with id {}", id);
         return new ResponseEntity<>(levelServiceImpl.getLevelDtoById(id), HttpStatus.OK);
     }
 }

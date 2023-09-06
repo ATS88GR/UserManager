@@ -1,7 +1,7 @@
 package com.education.projects.users.manager.response.dto;
 
-import  com.education.projects.users.manager.entity.Role;
-import  com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.entity.Role.Role;
+import com.education.projects.users.manager.entity.Level.Level;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

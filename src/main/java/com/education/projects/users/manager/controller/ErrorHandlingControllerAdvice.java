@@ -1,5 +1,8 @@
 package com.education.projects.users.manager.controller;
 
+import com.education.projects.users.manager.exception.EmptyException;
+import com.education.projects.users.manager.exception.LevelNotFoundException;
+import com.education.projects.users.manager.exception.RoleNotFoundException;
 import com.education.projects.users.manager.exception.UserNotFoundException;
 import com.education.projects.users.manager.response.ErrorResponse;
 import com.education.projects.users.manager.response.ValidationErrorResponse;
@@ -43,10 +46,31 @@ public class ErrorHandlingControllerAdvice {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    ResponseEntity<ErrorResponse> userNotFoundResponse(Exception e) {
+    ResponseEntity<ErrorResponse> onUserNotFoundResponse(Exception e) {
         ErrorResponse error = new ErrorResponse(e.getMessage());
         log.error("Error: {}", error);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(LevelNotFoundException.class)
+    ResponseEntity<ErrorResponse> onLevelNotFoundResponse(Exception e) {
+        ErrorResponse error = new ErrorResponse(e.getMessage());
+        log.error("Error: {}", error);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RoleNotFoundException.class)
+    ResponseEntity<ErrorResponse> onRoleNotFoundResponse(Exception e) {
+        ErrorResponse error = new ErrorResponse(e.getMessage());
+        log.error("Error: {}", error);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EmptyException.class)
+    ResponseEntity<ErrorResponse> onEmptyResponse(Exception e) {
+        ErrorResponse error = new ErrorResponse(e.getMessage());
+        log.error("Error: {}", error);
+        return new ResponseEntity<>(error, HttpStatus.NO_CONTENT);
     }
 
     @ExceptionHandler(Exception.class)

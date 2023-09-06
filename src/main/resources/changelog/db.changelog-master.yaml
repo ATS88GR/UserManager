@@ -27,7 +27,6 @@ databaseChangeLog:
                   type: uuid
                   defaultValueComputed: gen_random_uuid()
                   constraints:
-                    #default: uuid_generate_v1mc()
                     primaryKey: true
                     nullable: false
                     unique: true
@@ -96,3 +95,5 @@ databaseChangeLog:
                   name: modification_at
                   type: timestamp with time zone
                   defaultValue: now()
+  - include:
+      file: changelog/0001/changelog.yaml

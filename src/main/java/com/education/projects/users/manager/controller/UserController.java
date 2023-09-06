@@ -2,9 +2,9 @@ package com.education.projects.users.manager.controller;
 
 import com.education.projects.users.manager.request.dto.UserDtoReq;
 import com.education.projects.users.manager.response.dto.UserDtoResp;
-import com.education.projects.users.manager.entity.UserPage;
-import com.education.projects.users.manager.entity.UserSearchCriteria;
-import com.education.projects.users.manager.service.DBUserServiceImpl;
+import com.education.projects.users.manager.entity.User.UserPage;
+import com.education.projects.users.manager.entity.User.UserSearchCriteria;
+import com.education.projects.users.manager.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -29,7 +29,7 @@ import java.util.UUID;
 public class UserController {
 
     @Autowired
-    private DBUserServiceImpl dbUserServiceImpl;
+    private UserServiceImpl userServiceImpl;
 
     @Operation(summary = "Creates new row in database with user information",
             description = "Returns created user information from database")
@@ -41,8 +41,8 @@ public class UserController {
     @PostMapping("/users")  //url
     public ResponseEntity<UserDtoResp> createUser(@Valid @RequestBody UserDtoReq userDtoReq)
             throws Exception {
-        log.info("Create user = {}", userDtoReq);
-        return new ResponseEntity<>(dbUserServiceImpl.createUser(userDtoReq), HttpStatus.CREATED);
+        log.info("Create user: {}", userDtoReq);
+        return new ResponseEntity<>(userServiceImpl.createUser(userDtoReq), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Updates user information by id",
@@ -58,8 +58,8 @@ public class UserController {
             @Valid @RequestBody UserDtoReq userDtoReq,
             @PathVariable("id") @NotNull UUID id)
             throws Exception {
-        log.info("Update user with id = {}, update user info {}", id, userDtoReq);
-        return new ResponseEntity<>(dbUserServiceImpl.updateUser(userDtoReq, id), HttpStatus.OK);
+        log.info("Update user with id {}, update user info {}", id, userDtoReq);
+        return new ResponseEntity<>(userServiceImpl.updateUser(userDtoReq, id), HttpStatus.OK);
     }
 
     @Operation(summary = "Gets information about all users from database",
@@ -72,7 +72,7 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<Collection<UserDtoResp>> getUsers() throws Exception {
         log.info("Get all user info");
-        return new ResponseEntity<>(dbUserServiceImpl.getAllUsers(), HttpStatus.OK);
+        return new ResponseEntity<>(userServiceImpl.getAllUsers(), HttpStatus.OK);
     }
 
     @Operation(summary = "Gets sorted and filtered information about users from database",
@@ -87,7 +87,7 @@ public class UserController {
                                                                       UserSearchCriteria userSearchCriteria)
             throws Exception {
         log.info("Get common sorted and filtered user info");
-        return new ResponseEntity<>(dbUserServiceImpl.getSortedFilteredUsersWithPagination(userPage, userSearchCriteria),
+        return new ResponseEntity<>(userServiceImpl.getSortFilterPaginUsers(userPage, userSearchCriteria),
                 HttpStatus.OK);
     }
 
@@ -103,8 +103,8 @@ public class UserController {
     public ResponseEntity<UserDtoResp> getUserById(
             @PathVariable("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
             throws Exception {
-        log.info("Gets user with id = {}", id);
-        return new ResponseEntity<>(dbUserServiceImpl.getUserById(id), HttpStatus.OK);
+        log.info("Gets user with id {}", id);
+        return new ResponseEntity<>(userServiceImpl.getUserById(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Deletes user by id",
@@ -119,8 +119,8 @@ public class UserController {
     public ResponseEntity<String> deleteUserById(
             @PathVariable("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
             throws Exception {
-        log.info("Deletes user with id = {}", id);
-        dbUserServiceImpl.deleteUserById(id);
+        log.info("Deletes user with id {}", id);
+        userServiceImpl.deleteUserById(id);
         return new ResponseEntity<>("The user deleted", HttpStatus.OK);
     }
 }

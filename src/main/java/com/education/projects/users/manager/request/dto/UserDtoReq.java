@@ -36,9 +36,11 @@ public class UserDtoReq {
 
     @Schema (name = "roleId", description = "User role", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
     @NotNull (message = "RoleId should not be empty")
+    @org.hibernate.validator.constraints.UUID
     private UUID roleId;
 
     @Schema (name = "levelId", description = "User level", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
     @NotNull (message = "LevelId should not be empty")
+    @org.hibernate.validator.constraints.UUID
     private UUID levelId;
 }

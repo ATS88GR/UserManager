@@ -1,9 +1,0 @@
-INSERT INTO user_roles (roledescr) VALUES
-('system admin'),
-('moderator'),
-('user');
-
-INSERT INTO user_levels (leveldescr) VALUES
-('amatueur'),
-('phd candidate'),
-('phd');

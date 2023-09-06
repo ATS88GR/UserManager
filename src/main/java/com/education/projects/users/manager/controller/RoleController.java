@@ -1,5 +1,7 @@
 package com.education.projects.users.manager.controller;
 
+import com.education.projects.users.manager.entity.Role.RolePage;
+import com.education.projects.users.manager.entity.Role.RoleSearchCriteria;
 import com.education.projects.users.manager.response.dto.RoleDtoResp;
 import com.education.projects.users.manager.service.RoleServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +12,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,6 +42,22 @@ public class RoleController {
     public ResponseEntity<Collection<RoleDtoResp>> getRoles() throws Exception {
         log.info("Get all roles info");
         return new ResponseEntity<>(roleServiceImpl.getAllRoles(), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Gets sorted and filtered information about roles from database",
+            description = "Returns collection of role objects from database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Internal Server error")
+    })
+    @GetMapping("/sortedFilteredRoles")
+    public ResponseEntity<Page<RoleDtoResp>> getSortFilterRolesWithPagination(RolePage rolePage,
+                                                                              RoleSearchCriteria roleSearchCriteria)
+            throws Exception {
+        log.info("Get common sorted and filtered role info");
+        return new ResponseEntity<>(roleServiceImpl.getSortFilterPaginRoles(rolePage, roleSearchCriteria),
+                HttpStatus.OK);
     }
 
     @Operation(summary = "Gets role by id",
