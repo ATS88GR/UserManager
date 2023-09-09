@@ -69,7 +69,7 @@ public class LevelController {
     })
     @GetMapping("/levels/{id}")
     public ResponseEntity<LevelDtoResp> getLevelById(
-            @PathVariable("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
+            @PathVariable("id") @NotNull UUID id)
             throws Exception {
         log.info("Gets level with id {}", id);
         return new ResponseEntity<>(levelServiceImpl.getLevelDtoById(id), HttpStatus.OK);

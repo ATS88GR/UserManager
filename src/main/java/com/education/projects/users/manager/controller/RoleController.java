@@ -69,9 +69,9 @@ public class RoleController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/roles/{id}")
-    public ResponseEntity<RoleDtoResp> getRoleById(@PathVariable("id") @NotNull @Min(1) UUID id)
+    public ResponseEntity<RoleDtoResp> getRoleById(@PathVariable("id") @NotNull UUID id)
             throws Exception {
-        log.info("Gets role with id = {}", id);
+        log.info("Gets role with id {}", id);
         return new ResponseEntity<>(roleServiceImpl.getRoleDtoById(id), HttpStatus.OK);
     }
 }

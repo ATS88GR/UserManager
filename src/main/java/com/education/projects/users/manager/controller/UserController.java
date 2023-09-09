@@ -101,7 +101,7 @@ public class UserController {
     })
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDtoResp> getUserById(
-            @PathVariable("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
+            @PathVariable("id") @NotNull UUID id)
             throws Exception {
         log.info("Gets user with id {}", id);
         return new ResponseEntity<>(userServiceImpl.getUserById(id), HttpStatus.OK);
@@ -117,7 +117,7 @@ public class UserController {
     })
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUserById(
-            @PathVariable("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
+            @PathVariable("id") @NotNull UUID id)
             throws Exception {
         log.info("Deletes user with id {}", id);
         userServiceImpl.deleteUserById(id);
