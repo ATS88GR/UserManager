@@ -3,6 +3,8 @@ package com.education.projects.users.manager.service;
 import com.education.projects.users.manager.exception.EmptyException;
 import com.education.projects.users.manager.exception.UserNotFoundException;
 import com.education.projects.users.manager.request.dto.UserDtoReq;
+import com.education.projects.users.manager.response.dto.LevelDtoResp;
+import com.education.projects.users.manager.response.dto.RoleDtoResp;
 import com.education.projects.users.manager.response.dto.UserDtoResp;
 import com.education.projects.users.manager.entity.User.User;
 import com.education.projects.users.manager.entity.User.UserPage;
@@ -47,7 +49,9 @@ public class UserServiceImpl implements UserService {
                 roleServiceImpl.getRoleById(userDtoReq.getRoleId()),
                 levelServiceImpl.getLevelById(userDtoReq.getLevelId()));
         return userMapper.userToUserDto(
-                userRepository.save(user));
+                userRepository.save(user),
+                new RoleDtoResp(user.getRole().getId(), user.getRole().getRoleDescr()),
+                new LevelDtoResp(user.getLevel().getId(), user.getLevel().getLevelDescr()));
     }
 
     /**
@@ -66,7 +70,9 @@ public class UserServiceImpl implements UserService {
             userToChange.setId(id);
             userToChange.setCreatedAt(userRepository.getReferenceById(id).getCreatedAt());
             return userMapper.userToUserDto(
-                    userRepository.save(userToChange));
+                    userRepository.save(userToChange),
+                    new RoleDtoResp(userToChange.getRole().getId(), userToChange.getRole().getRoleDescr()),
+                    new LevelDtoResp(userToChange.getLevel().getId(), userToChange.getLevel().getLevelDescr()));
         }
         throw new UserNotFoundException(id);
     }
@@ -76,10 +82,10 @@ public class UserServiceImpl implements UserService {
      *
      * @return The list of the User objects
      */
-    public Collection<UserDtoResp> getAllUsers() throws Exception{
+    public Collection<UserDtoResp> getAllUsers() throws Exception {
         Collection<UserDtoResp> userDtoRespList =
                 userMapper.userListToUserDtoList(userRepository.findAll());
-        if(userDtoRespList.isEmpty()) throw new EmptyException();
+        if (userDtoRespList.isEmpty()) throw new EmptyException();
         return userDtoRespList;
     }
 
@@ -91,8 +97,12 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     public UserDtoResp getUserById(UUID id) throws Exception {
-        if (userRepository.existsById(id))
-            return userMapper.userToUserDto(userRepository.getReferenceById(id));
+        if (userRepository.existsById(id)) {
+            User user = userRepository.getReferenceById(id);
+            return userMapper.userToUserDto(user,
+                    new RoleDtoResp(user.getRole().getId(), user.getRole().getRoleDescr()),
+                    new LevelDtoResp(user.getLevel().getId(), user.getLevel().getLevelDescr()));
+        }
         throw new UserNotFoundException(id);
     }
 
@@ -114,10 +124,10 @@ public class UserServiceImpl implements UserService {
      */
     public Page<UserDtoResp> getSortFilterPaginUsers(UserPage userPage,
                                                      UserSearchCriteria userSearchCriteria)
-            throws Exception{
+            throws Exception {
         Page<UserDtoResp> userDtoRespPage =
                 userCriteriaRepository.findAllWithFilters(userPage, userSearchCriteria);
-        if(userDtoRespPage.isEmpty()) throw new EmptyException();
+        if (userDtoRespPage.isEmpty()) throw new EmptyException();
         return userDtoRespPage;
     }
 }

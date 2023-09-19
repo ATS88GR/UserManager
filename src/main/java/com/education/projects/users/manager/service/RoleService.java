@@ -14,8 +14,6 @@ public interface RoleService {
 
     RoleDtoResp getRoleDtoById(UUID id) throws Exception;
 
-    Role getRoleById(UUID id) throws Exception;
-
     Page<RoleDtoResp> getSortFilterPaginRoles(RolePage rolePage,
                                               RoleSearchCriteria roleSearchCriteria) throws Exception;
 }

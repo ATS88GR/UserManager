@@ -33,10 +33,11 @@ public class LevelServiceImpl implements LevelService {
      * @return The list of the Level objects
      */
     public Collection<LevelDtoResp> getAllLevels() throws Exception{
-        Collection<LevelDtoResp> levelDtoResp =
+        Collection<LevelDtoResp> levelDtoRespList =
                 levelMapper.levelListToLevelDtoList(levelRepository.findAll());
-        if(levelDtoResp.isEmpty()) throw new EmptyException();
-        return levelDtoResp;
+        if(!levelDtoRespList.isEmpty())
+            return levelDtoRespList;
+        throw new EmptyException();
     }
 
     /**
@@ -59,7 +60,7 @@ public class LevelServiceImpl implements LevelService {
      * @return The Level object from database
      * @throws LevelNotFoundException
      */
-    public Level getLevelById(UUID id) throws Exception {
+   Level getLevelById(UUID id) throws Exception {
         if (levelRepository.existsById(id))
             return levelRepository.getReferenceById(id);
         throw new LevelNotFoundException(id);
@@ -75,9 +76,9 @@ public class LevelServiceImpl implements LevelService {
     public Page<LevelDtoResp> getSortFilterPaginLevels(LevelPage levelPage,
                                                        LevelSearchCriteria levelSearchCriteria)
     throws Exception{
-        Page<LevelDtoResp> levelDtoResp =
+        Page<LevelDtoResp> pageLevelDtoResp =
                 levelCriteriaRepository.findAllWithFilters(levelPage, levelSearchCriteria);
-        if(levelDtoResp.isEmpty()) throw new EmptyException();
-        return levelDtoResp;
+        if(pageLevelDtoResp.isEmpty()) throw new EmptyException();
+        return pageLevelDtoResp;
     }
 }

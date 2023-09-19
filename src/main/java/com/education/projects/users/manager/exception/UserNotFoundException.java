@@ -7,6 +7,6 @@ import java.util.UUID;
 @Getter
 public class UserNotFoundException extends Exception{
     public UserNotFoundException (UUID userId){
-        super("The user with id " + userId + " wasn't found");
+        super("The user with id " + userId + " not found");
     }
 }

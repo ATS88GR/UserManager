@@ -70,7 +70,7 @@ public class ErrorHandlingControllerAdvice {
     ResponseEntity<ErrorResponse> onEmptyResponse(Exception e) {
         ErrorResponse error = new ErrorResponse(e.getMessage());
         log.error("Error: {}", error);
-        return new ResponseEntity<>(error, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

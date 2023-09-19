@@ -59,7 +59,7 @@ public class RoleServiceImpl implements RoleService {
      * @return The Role object from database
      * @throws RoleNotFoundException
      */
-    public Role getRoleById(UUID id) throws Exception {
+    Role getRoleById(UUID id) throws Exception {
         if (roleRepository.existsById(id))
             return roleRepository.getReferenceById(id);
         throw new RoleNotFoundException(id);
@@ -74,10 +74,10 @@ public class RoleServiceImpl implements RoleService {
      */
     public Page<RoleDtoResp> getSortFilterPaginRoles(RolePage rolePage,
                                                      RoleSearchCriteria roleSearchCriteria)
-    throws Exception{
+            throws Exception {
         Page<RoleDtoResp> roleDtoResp =
                 roleCriteriaRepository.findAllWithFilters(rolePage, roleSearchCriteria);
-        if(roleDtoResp.isEmpty()) throw new EmptyException();
+        if (roleDtoResp.isEmpty()) throw new EmptyException();
         return roleDtoResp;
     }
 }

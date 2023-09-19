@@ -47,6 +47,7 @@ public class LevelCriteriaRepository {
 
         Pageable pageable = getPageable(levelPage);
 
+        //long levelsCount = getLevelsCount(predicate);
         long levelsCount = 10;
 
         return (new PageImpl<>(

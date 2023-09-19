@@ -35,6 +35,7 @@ public class LevelController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "The level list is empty"),
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/levels")
@@ -48,6 +49,7 @@ public class LevelController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "The level list is empty"),
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/sortedFilteredLevels")
