@@ -1,4 +1,4 @@
-package com.education.projects.users.manager.request.dto;
+package com.education.projects.users.manager.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;

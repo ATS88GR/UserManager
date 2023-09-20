@@ -1,17 +1,16 @@
 package com.education.projects.users.manager.mapper;
 
-import com.education.projects.users.manager.entity.Level.Level;
-import com.education.projects.users.manager.entity.Role.Role;
-import com.education.projects.users.manager.request.dto.UserDtoReq;
-import com.education.projects.users.manager.response.dto.LevelDtoResp;
-import com.education.projects.users.manager.response.dto.RoleDtoResp;
-import com.education.projects.users.manager.response.dto.UserDtoResp;
-import com.education.projects.users.manager.entity.User.User;
+import com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.entity.Role;
+import com.education.projects.users.manager.dto.request.UserDtoReq;
+import com.education.projects.users.manager.dto.response.LevelDtoResp;
+import com.education.projects.users.manager.dto.response.RoleDtoResp;
+import com.education.projects.users.manager.dto.response.UserDtoResp;
+import com.education.projects.users.manager.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

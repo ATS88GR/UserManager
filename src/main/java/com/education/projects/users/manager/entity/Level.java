@@ -1,4 +1,4 @@
-package com.education.projects.users.manager.entity.Level;
+package com.education.projects.users.manager.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

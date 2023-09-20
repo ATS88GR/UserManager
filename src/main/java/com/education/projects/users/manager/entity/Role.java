@@ -1,4 +1,4 @@
-package com.education.projects.users.manager.entity.Role;
+package com.education.projects.users.manager.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

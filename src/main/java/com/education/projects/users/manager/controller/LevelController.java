@@ -1,8 +1,8 @@
 package com.education.projects.users.manager.controller;
 
-import com.education.projects.users.manager.entity.Level.LevelPage;
-import com.education.projects.users.manager.entity.Level.LevelSearchCriteria;
-import com.education.projects.users.manager.response.dto.LevelDtoResp;
+import com.education.projects.users.manager.dto.request.LevelPage;
+import com.education.projects.users.manager.dto.request.LevelSearchCriteria;
+import com.education.projects.users.manager.dto.response.LevelDtoResp;
 import com.education.projects.users.manager.service.LevelServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

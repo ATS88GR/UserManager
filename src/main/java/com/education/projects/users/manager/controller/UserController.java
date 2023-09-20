@@ -1,9 +1,9 @@
 package com.education.projects.users.manager.controller;
 
-import com.education.projects.users.manager.request.dto.UserDtoReq;
-import com.education.projects.users.manager.response.dto.UserDtoResp;
-import com.education.projects.users.manager.entity.User.UserPage;
-import com.education.projects.users.manager.entity.User.UserSearchCriteria;
+import com.education.projects.users.manager.dto.request.UserDtoReq;
+import com.education.projects.users.manager.dto.response.UserDtoResp;
+import com.education.projects.users.manager.dto.request.UserPage;
+import com.education.projects.users.manager.dto.request.UserSearchCriteria;
 import com.education.projects.users.manager.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

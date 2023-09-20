@@ -1,26 +1,22 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.entity.Level.Level;
-import com.education.projects.users.manager.entity.Level.LevelPage;
-import com.education.projects.users.manager.entity.Level.LevelSearchCriteria;
+import com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.dto.request.LevelPage;
+import com.education.projects.users.manager.dto.request.LevelSearchCriteria;
 import com.education.projects.users.manager.exception.EmptyException;
 import com.education.projects.users.manager.exception.LevelNotFoundException;
 import com.education.projects.users.manager.mapper.LevelMapper;
 import com.education.projects.users.manager.repository.LevelCriteriaRepository;
 import com.education.projects.users.manager.repository.LevelRepository;
-import com.education.projects.users.manager.response.dto.LevelDtoResp;
+import com.education.projects.users.manager.dto.response.LevelDtoResp;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoSession;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,11 +62,9 @@ class LevelServiceImplTest {
 
     /**
      * Tests for an unsuccessful result of getting a Level by id
-     *
-     * @throws LevelNotFoundException
      */
     @Test
-    void getLevelByIdOnFail() throws Exception {
+    void getLevelByIdOnFail() {
         UUID testUUID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
         when(levelRepository.existsById(testUUID)).thenReturn(false);
@@ -120,11 +114,9 @@ class LevelServiceImplTest {
 
     /**
      * Tests for an unsuccessful result of getting all Levels
-     *
-     * @throws Exception
      */
     @Test
-    void getAllLevelsOnFail() throws Exception {
+    void getAllLevelsOnFail() {
         List<LevelDtoResp> levelResp = new ArrayList<>();
 
         List<Level> levelList = new ArrayList<>();
@@ -173,11 +165,9 @@ class LevelServiceImplTest {
 
     /**
      * Tests for an unsuccessful result of getting a Level dto by id
-     *
-     * @throws Exception
      */
     @Test
-    void getLevelDtoByIdOnFail() throws Exception {
+    void getLevelDtoByIdOnFail(){
         UUID testUUID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
         when(levelRepository.existsById(testUUID)).thenReturn(false);
@@ -193,7 +183,7 @@ class LevelServiceImplTest {
     @Test
     void getSortFilterPaginLevels() throws Exception {
         Page<LevelDtoResp> pageLevelDtoRespExp = mock(Page.class);
-        LevelPage levelPage = new LevelPage(0, 5, ASC, "levelDescr");
+        LevelPage levelPage = new LevelPage();
         LevelSearchCriteria levelSearchCriteria = new LevelSearchCriteria("phd");
 
         when(levelCriteriaRepository.findAllWithFilters(levelPage, levelSearchCriteria)).thenReturn(pageLevelDtoRespExp);

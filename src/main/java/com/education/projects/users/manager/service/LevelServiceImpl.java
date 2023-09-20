@@ -1,12 +1,12 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.entity.Level.LevelSearchCriteria;
-import com.education.projects.users.manager.entity.Level.LevelPage;
+import com.education.projects.users.manager.dto.request.LevelSearchCriteria;
+import com.education.projects.users.manager.dto.request.LevelPage;
 import com.education.projects.users.manager.exception.EmptyException;
 import com.education.projects.users.manager.exception.LevelNotFoundException;
 import com.education.projects.users.manager.repository.LevelCriteriaRepository;
-import com.education.projects.users.manager.response.dto.LevelDtoResp;
-import com.education.projects.users.manager.entity.Level.Level;
+import com.education.projects.users.manager.dto.response.LevelDtoResp;
+import com.education.projects.users.manager.entity.Level;
 import com.education.projects.users.manager.mapper.LevelMapper;
 import com.education.projects.users.manager.repository.LevelRepository;
 import lombok.extern.slf4j.Slf4j;

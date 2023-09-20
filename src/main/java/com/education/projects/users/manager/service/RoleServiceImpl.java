@@ -1,12 +1,12 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.entity.Role.RolePage;
-import com.education.projects.users.manager.entity.Role.RoleSearchCriteria;
+import com.education.projects.users.manager.dto.request.RolePage;
+import com.education.projects.users.manager.dto.request.RoleSearchCriteria;
 import com.education.projects.users.manager.exception.EmptyException;
 import com.education.projects.users.manager.exception.RoleNotFoundException;
 import com.education.projects.users.manager.repository.RoleCriteriaRepository;
-import com.education.projects.users.manager.response.dto.RoleDtoResp;
-import com.education.projects.users.manager.entity.Role.Role;
+import com.education.projects.users.manager.dto.response.RoleDtoResp;
+import com.education.projects.users.manager.entity.Role;
 import com.education.projects.users.manager.mapper.RoleMapper;
 import com.education.projects.users.manager.repository.RoleRepository;
 import lombok.extern.slf4j.Slf4j;

@@ -1,14 +1,13 @@
 package com.education.projects.users.manager.controller;
 
-import com.education.projects.users.manager.entity.Role.RolePage;
-import com.education.projects.users.manager.entity.Role.RoleSearchCriteria;
-import com.education.projects.users.manager.response.dto.RoleDtoResp;
+import com.education.projects.users.manager.dto.request.RolePage;
+import com.education.projects.users.manager.dto.request.RoleSearchCriteria;
+import com.education.projects.users.manager.dto.response.RoleDtoResp;
 import com.education.projects.users.manager.service.RoleServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

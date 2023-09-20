@@ -1,9 +1,9 @@
 package com.education.projects.users.manager.repository;
 
-import com.education.projects.users.manager.response.dto.UserDtoResp;
-import com.education.projects.users.manager.entity.User.User;
-import com.education.projects.users.manager.entity.User.UserPage;
-import com.education.projects.users.manager.entity.User.UserSearchCriteria;
+import com.education.projects.users.manager.dto.response.UserDtoResp;
+import com.education.projects.users.manager.entity.User;
+import com.education.projects.users.manager.dto.request.UserPage;
+import com.education.projects.users.manager.dto.request.UserSearchCriteria;
 import com.education.projects.users.manager.mapper.UserMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -79,17 +79,17 @@ public class UserCriteriaRepository {
                                    Root<User> userRoot) {
         List<Predicate> predicates = new ArrayList<>();
         if(Objects.nonNull(userSearchCriteria.getFirstName()))
-            predicates.add(criteriaBuilder.like(userRoot.get("firstname"),
+            predicates.add(criteriaBuilder.like(userRoot.get("firstName"),
                     "%" + userSearchCriteria.getFirstName() + "%"));
         if(Objects.nonNull(userSearchCriteria.getLastName()))
-            predicates.add(criteriaBuilder.like(userRoot.get("lastname"),
+            predicates.add(criteriaBuilder.like(userRoot.get("lastName"),
                     "%" + userSearchCriteria.getLastName() + "%"));
-        if(Objects.nonNull(userSearchCriteria.getRoleId()))
-            predicates.add(criteriaBuilder.equal(userRoot.get("role_id"),
-                    userSearchCriteria.getRoleId()));
-        if(Objects.nonNull(userSearchCriteria.getLevelId()))
-            predicates.add(criteriaBuilder.equal(userRoot.get("level_id"),
-                    userSearchCriteria.getLevelId()));
+        if(Objects.nonNull(userSearchCriteria.getRole()))
+            predicates.add(criteriaBuilder.equal(userRoot.get("role"),
+                    userSearchCriteria.getRole()));
+        if(Objects.nonNull(userSearchCriteria.getLevel()))
+            predicates.add(criteriaBuilder.equal(userRoot.get("level"),
+                    userSearchCriteria.getLevel()));
         return criteriaBuilder.and(predicates.toArray((new Predicate[0])));
     }
 }

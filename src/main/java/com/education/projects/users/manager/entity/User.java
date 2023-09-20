@@ -1,7 +1,7 @@
-package com.education.projects.users.manager.entity.User;
+package com.education.projects.users.manager.entity;
 
-import com.education.projects.users.manager.entity.Level.Level;
-import com.education.projects.users.manager.entity.Role.Role;
+import com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.entity.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -47,11 +47,11 @@ public class User {
     @Column(name = "modification_at")
     private Timestamp modificationAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "level_id", referencedColumnName = "id")
     private Level level;
 }

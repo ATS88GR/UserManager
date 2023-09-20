@@ -2,12 +2,10 @@ package com.education.projects.users.manager.service;
 
 import com.education.projects.users.manager.mapper.UserMapper;
 import com.education.projects.users.manager.repository.UserRepository;
-import com.education.projects.users.manager.request.dto.UserDtoReq;
+import com.education.projects.users.manager.dto.request.UserDtoReq;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceImplTest {
 

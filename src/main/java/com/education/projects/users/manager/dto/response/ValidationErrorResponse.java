@@ -1,4 +1,4 @@
-package com.education.projects.users.manager.response;
+package com.education.projects.users.manager.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

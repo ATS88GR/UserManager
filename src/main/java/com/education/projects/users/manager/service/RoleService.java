@@ -1,9 +1,8 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.entity.Role.RolePage;
-import com.education.projects.users.manager.entity.Role.RoleSearchCriteria;
-import com.education.projects.users.manager.response.dto.RoleDtoResp;
-import com.education.projects.users.manager.entity.Role.Role;
+import com.education.projects.users.manager.dto.request.RolePage;
+import com.education.projects.users.manager.dto.request.RoleSearchCriteria;
+import com.education.projects.users.manager.dto.response.RoleDtoResp;
 import org.springframework.data.domain.Page;
 
 import java.util.Collection;

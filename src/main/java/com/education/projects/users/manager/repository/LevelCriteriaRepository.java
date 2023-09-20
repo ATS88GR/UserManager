@@ -1,10 +1,10 @@
 package com.education.projects.users.manager.repository;
 
-import com.education.projects.users.manager.entity.Level.Level;
-import com.education.projects.users.manager.entity.Level.LevelPage;
-import com.education.projects.users.manager.entity.Level.LevelSearchCriteria;
+import com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.dto.request.LevelPage;
+import com.education.projects.users.manager.dto.request.LevelSearchCriteria;
 import com.education.projects.users.manager.mapper.LevelMapper;
-import com.education.projects.users.manager.response.dto.LevelDtoResp;
+import com.education.projects.users.manager.dto.response.LevelDtoResp;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;

@@ -1,10 +1,8 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.entity.Level.LevelPage;
-import com.education.projects.users.manager.entity.Level.LevelSearchCriteria;
-import com.education.projects.users.manager.exception.EmptyException;
-import com.education.projects.users.manager.response.dto.LevelDtoResp;
-import com.education.projects.users.manager.entity.Level.Level;
+import com.education.projects.users.manager.dto.request.LevelPage;
+import com.education.projects.users.manager.dto.request.LevelSearchCriteria;
+import com.education.projects.users.manager.dto.response.LevelDtoResp;
 import org.springframework.data.domain.Page;
 
 import java.util.Collection;
