@@ -1,10 +1,10 @@
 package com.education.projects.users.manager.repository;
 
-import com.education.projects.users.manager.entity.Level;
 import com.education.projects.users.manager.dto.request.LevelPage;
 import com.education.projects.users.manager.dto.request.LevelSearchCriteria;
-import com.education.projects.users.manager.mapper.LevelMapper;
 import com.education.projects.users.manager.dto.response.LevelDtoResp;
+import com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.mapper.LevelMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -12,7 +12,11 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -47,8 +51,7 @@ public class LevelCriteriaRepository {
 
         Pageable pageable = getPageable(levelPage);
 
-        //long levelsCount = getLevelsCount(predicate);
-        long levelsCount = 10;
+        long levelsCount = getLevelsCount();
 
         return (new PageImpl<>(
                 levelMapper.levelListToLevelDtoList(typedQuery.getResultList()),
@@ -56,7 +59,7 @@ public class LevelCriteriaRepository {
                 levelsCount));
     }
 
-    private long getLevelsCount(Predicate predicate) {
+    private long getLevelsCount() {
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         Root<Level> countRoot = countQuery.from(Level.class);
         countQuery.select(criteriaBuilder.count(countRoot));

@@ -1,8 +1,8 @@
 package com.education.projects.users.manager.service;
 
+import com.education.projects.users.manager.dto.request.UserDtoReq;
 import com.education.projects.users.manager.dto.request.UserPage;
 import com.education.projects.users.manager.dto.request.UserSearchCriteria;
-import com.education.projects.users.manager.dto.request.UserDtoReq;
 import com.education.projects.users.manager.dto.response.UserDtoResp;
 import org.springframework.data.domain.Page;
 

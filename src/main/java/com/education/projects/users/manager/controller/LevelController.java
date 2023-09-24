@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,7 @@ public class LevelController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/levels")
-    public ResponseEntity<Collection<LevelDtoResp>> getLevels() throws Exception {
+    public ResponseEntity<Collection<LevelDtoResp>> getLevels() {
         log.info("Get all levels info");
         return new ResponseEntity<>(levelServiceImpl.getAllLevels(), HttpStatus.OK);
     }
@@ -54,8 +55,7 @@ public class LevelController {
     })
     @GetMapping("/sortedFilteredLevels")
     public ResponseEntity<Page<LevelDtoResp>> getSortFilterLevelsWithPagination(LevelPage levelPage,
-                                                                              LevelSearchCriteria levelSearchCriteria)
-            throws Exception {
+                                                                              LevelSearchCriteria levelSearchCriteria) {
         log.info("Get common sorted and filtered level info");
         return new ResponseEntity<>(levelServiceImpl.getSortFilterPaginLevels(levelPage, levelSearchCriteria),
                 HttpStatus.OK);

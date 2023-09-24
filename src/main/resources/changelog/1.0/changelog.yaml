@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: changelog/1.0/insertRoleTable.sql
+  - include:
+      file: changelog/1.0/insertLevelTable.sql
+  - include:
+      file: changelog/1.0/insertAnonymousRole.sql

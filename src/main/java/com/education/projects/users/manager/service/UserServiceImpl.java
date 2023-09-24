@@ -1,16 +1,16 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.exception.EmptyException;
-import com.education.projects.users.manager.exception.UserNotFoundException;
 import com.education.projects.users.manager.dto.request.UserDtoReq;
+import com.education.projects.users.manager.dto.request.UserPage;
+import com.education.projects.users.manager.dto.request.UserSearchCriteria;
 import com.education.projects.users.manager.dto.response.LevelDtoResp;
 import com.education.projects.users.manager.dto.response.RoleDtoResp;
 import com.education.projects.users.manager.dto.response.UserDtoResp;
 import com.education.projects.users.manager.entity.User;
-import com.education.projects.users.manager.dto.request.UserPage;
-import com.education.projects.users.manager.dto.request.UserSearchCriteria;
+import com.education.projects.users.manager.exception.UserNotFoundException;
 import com.education.projects.users.manager.mapper.UserMapper;
-import com.education.projects.users.manager.repository.*;
+import com.education.projects.users.manager.repository.UserCriteriaRepository;
+import com.education.projects.users.manager.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -82,11 +82,8 @@ public class UserServiceImpl implements UserService {
      *
      * @return The list of the User objects
      */
-    public Collection<UserDtoResp> getAllUsers() throws Exception {
-        Collection<UserDtoResp> userDtoRespList =
-                userMapper.userListToUserDtoList(userRepository.findAll());
-        if (userDtoRespList.isEmpty()) throw new EmptyException();
-        return userDtoRespList;
+    public Collection<UserDtoResp> getAllUsers() {
+        return userMapper.userListToUserDtoList(userRepository.findAll());
     }
 
     /**
@@ -94,16 +91,27 @@ public class UserServiceImpl implements UserService {
      *
      * @param id id of the user object in database
      * @return The User object from database
-     * @throws Exception
      */
-    public UserDtoResp getUserById(UUID id) throws Exception {
+    public UserDtoResp getUserById(UUID id) {
         if (userRepository.existsById(id)) {
             User user = userRepository.getReferenceById(id);
             return userMapper.userToUserDto(user,
                     new RoleDtoResp(user.getRole().getId(), user.getRole().getRoleDescr()),
                     new LevelDtoResp(user.getLevel().getId(), user.getLevel().getLevelDescr()));
         }
-        throw new UserNotFoundException(id);
+        return getAnonymousUser();
+    }
+
+    private UserDtoResp getAnonymousUser() {
+        Collection<RoleDtoResp> allRoles = roleServiceImpl.getAllRoles();
+        RoleDtoResp anonymous = null;
+        for (RoleDtoResp roleDtoResp : allRoles) {
+            if (roleDtoResp.getRoleDescr().equals("anonymous"))
+                anonymous = roleDtoResp;
+        }
+        UserDtoResp resp = new UserDtoResp();
+        resp.setRoleDtoResp(anonymous);
+        return resp;
     }
 
     /**
@@ -123,11 +131,7 @@ public class UserServiceImpl implements UserService {
      * @return List of users with pagination and search settings
      */
     public Page<UserDtoResp> getSortFilterPaginUsers(UserPage userPage,
-                                                     UserSearchCriteria userSearchCriteria)
-            throws Exception {
-        Page<UserDtoResp> userDtoRespPage =
-                userCriteriaRepository.findAllWithFilters(userPage, userSearchCriteria);
-        if (userDtoRespPage.isEmpty()) throw new EmptyException();
-        return userDtoRespPage;
+                                                     UserSearchCriteria userSearchCriteria) {
+        return userCriteriaRepository.findAllWithFilters(userPage, userSearchCriteria);
     }
 }

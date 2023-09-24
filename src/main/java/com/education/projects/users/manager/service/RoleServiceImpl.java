@@ -2,12 +2,11 @@ package com.education.projects.users.manager.service;
 
 import com.education.projects.users.manager.dto.request.RolePage;
 import com.education.projects.users.manager.dto.request.RoleSearchCriteria;
-import com.education.projects.users.manager.exception.EmptyException;
-import com.education.projects.users.manager.exception.RoleNotFoundException;
-import com.education.projects.users.manager.repository.RoleCriteriaRepository;
 import com.education.projects.users.manager.dto.response.RoleDtoResp;
 import com.education.projects.users.manager.entity.Role;
+import com.education.projects.users.manager.exception.RoleNotFoundException;
 import com.education.projects.users.manager.mapper.RoleMapper;
+import com.education.projects.users.manager.repository.RoleCriteriaRepository;
 import com.education.projects.users.manager.repository.RoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +31,8 @@ public class RoleServiceImpl implements RoleService {
      *
      * @return The list of the Role objects
      */
-    public Collection<RoleDtoResp> getAllRoles() throws Exception {
-        Collection<RoleDtoResp> roleDtoResp =
-                roleMapper.roleListToRoleDtoList(roleRepository.findAll());
-        if (roleDtoResp.isEmpty()) throw new EmptyException();
-        return roleDtoResp;
+    public Collection<RoleDtoResp> getAllRoles() {
+        return roleMapper.roleListToRoleDtoList(roleRepository.findAll());
     }
 
     /**
@@ -73,11 +69,7 @@ public class RoleServiceImpl implements RoleService {
      * @return sorted filtered List of Role DTO objects with pagination
      */
     public Page<RoleDtoResp> getSortFilterPaginRoles(RolePage rolePage,
-                                                     RoleSearchCriteria roleSearchCriteria)
-            throws Exception {
-        Page<RoleDtoResp> roleDtoResp =
-                roleCriteriaRepository.findAllWithFilters(rolePage, roleSearchCriteria);
-        if (roleDtoResp.isEmpty()) throw new EmptyException();
-        return roleDtoResp;
+                                                     RoleSearchCriteria roleSearchCriteria) {
+        return roleCriteriaRepository.findAllWithFilters(rolePage, roleSearchCriteria);
     }
 }

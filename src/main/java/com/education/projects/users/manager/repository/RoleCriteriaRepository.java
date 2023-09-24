@@ -1,10 +1,10 @@
 package com.education.projects.users.manager.repository;
 
-import com.education.projects.users.manager.entity.Role;
 import com.education.projects.users.manager.dto.request.RolePage;
 import com.education.projects.users.manager.dto.request.RoleSearchCriteria;
-import com.education.projects.users.manager.mapper.RoleMapper;
 import com.education.projects.users.manager.dto.response.RoleDtoResp;
+import com.education.projects.users.manager.entity.Role;
+import com.education.projects.users.manager.mapper.RoleMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -12,7 +12,11 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -47,7 +51,7 @@ public class RoleCriteriaRepository {
 
         Pageable pageable = getPageable(rolePage);
 
-        long rolesCount = 10;
+        long rolesCount = getRolesCount();
 
         return (new PageImpl<>(
                 roleMapper.roleListToRoleDtoList(typedQuery.getResultList()),
@@ -55,7 +59,7 @@ public class RoleCriteriaRepository {
                 rolesCount));
     }
 
-    private long getRolesCount(Predicate predicate) {
+    private long getRolesCount() {
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         Root<Role> countRoot = countQuery.from(Role.class);
         countQuery.select(criteriaBuilder.count(countRoot));

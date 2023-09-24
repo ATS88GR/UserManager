@@ -1,13 +1,12 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.dto.request.LevelSearchCriteria;
 import com.education.projects.users.manager.dto.request.LevelPage;
-import com.education.projects.users.manager.exception.EmptyException;
-import com.education.projects.users.manager.exception.LevelNotFoundException;
-import com.education.projects.users.manager.repository.LevelCriteriaRepository;
+import com.education.projects.users.manager.dto.request.LevelSearchCriteria;
 import com.education.projects.users.manager.dto.response.LevelDtoResp;
 import com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.exception.LevelNotFoundException;
 import com.education.projects.users.manager.mapper.LevelMapper;
+import com.education.projects.users.manager.repository.LevelCriteriaRepository;
 import com.education.projects.users.manager.repository.LevelRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +31,8 @@ public class LevelServiceImpl implements LevelService {
      *
      * @return The list of the Level objects
      */
-    public Collection<LevelDtoResp> getAllLevels() throws Exception{
-        Collection<LevelDtoResp> levelDtoRespList =
-                levelMapper.levelListToLevelDtoList(levelRepository.findAll());
-        if(!levelDtoRespList.isEmpty())
-            return levelDtoRespList;
-        throw new EmptyException();
+    public Collection<LevelDtoResp> getAllLevels() {
+        return levelMapper.levelListToLevelDtoList(levelRepository.findAll());
     }
 
     /**
@@ -60,7 +55,7 @@ public class LevelServiceImpl implements LevelService {
      * @return The Level object from database
      * @throws LevelNotFoundException
      */
-   Level getLevelById(UUID id) throws Exception {
+    Level getLevelById(UUID id) throws Exception {
         if (levelRepository.existsById(id))
             return levelRepository.getReferenceById(id);
         throw new LevelNotFoundException(id);
@@ -74,11 +69,7 @@ public class LevelServiceImpl implements LevelService {
      * @return sorted filtered List of Level DTO objects with pagination
      */
     public Page<LevelDtoResp> getSortFilterPaginLevels(LevelPage levelPage,
-                                                       LevelSearchCriteria levelSearchCriteria)
-    throws Exception{
-        Page<LevelDtoResp> pageLevelDtoResp =
-                levelCriteriaRepository.findAllWithFilters(levelPage, levelSearchCriteria);
-        if(pageLevelDtoResp.isEmpty()) throw new EmptyException();
-        return pageLevelDtoResp;
+                                                       LevelSearchCriteria levelSearchCriteria) {
+        return levelCriteriaRepository.findAllWithFilters(levelPage, levelSearchCriteria);
     }
 }

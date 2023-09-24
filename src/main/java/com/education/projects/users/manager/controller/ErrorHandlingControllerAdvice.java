@@ -1,12 +1,11 @@
 package com.education.projects.users.manager.controller;
 
-import com.education.projects.users.manager.exception.EmptyException;
-import com.education.projects.users.manager.exception.LevelNotFoundException;
-import com.education.projects.users.manager.exception.RoleNotFoundException;
-import com.education.projects.users.manager.exception.UserNotFoundException;
 import com.education.projects.users.manager.dto.response.ErrorResponse;
 import com.education.projects.users.manager.dto.response.ValidationErrorResponse;
 import com.education.projects.users.manager.dto.response.Violation;
+import com.education.projects.users.manager.exception.LevelNotFoundException;
+import com.education.projects.users.manager.exception.RoleNotFoundException;
+import com.education.projects.users.manager.exception.UserNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpServerErrorException;
 
 @Slf4j
@@ -61,13 +61,6 @@ public class ErrorHandlingControllerAdvice {
 
     @ExceptionHandler(RoleNotFoundException.class)
     ResponseEntity<ErrorResponse> onRoleNotFoundResponse(Exception e) {
-        ErrorResponse error = new ErrorResponse(e.getMessage());
-        log.error("Error: {}", error);
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(EmptyException.class)
-    ResponseEntity<ErrorResponse> onEmptyResponse(Exception e) {
         ErrorResponse error = new ErrorResponse(e.getMessage());
         log.error("Error: {}", error);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);

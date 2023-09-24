@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,7 @@ public class RoleController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/roles")
-    public ResponseEntity<Collection<RoleDtoResp>> getRoles() throws Exception {
+    public ResponseEntity<Collection<RoleDtoResp>> getRoles() {
         log.info("Get all roles info");
         return new ResponseEntity<>(roleServiceImpl.getAllRoles(), HttpStatus.OK);
     }
@@ -54,8 +55,7 @@ public class RoleController {
     })
     @GetMapping("/sortedFilteredRoles")
     public ResponseEntity<Page<RoleDtoResp>> getSortFilterRolesWithPagination(RolePage rolePage,
-                                                                              RoleSearchCriteria roleSearchCriteria)
-            throws Exception {
+                                                                              RoleSearchCriteria roleSearchCriteria) {
         log.info("Get common sorted and filtered role info");
         return new ResponseEntity<>(roleServiceImpl.getSortFilterPaginRoles(rolePage, roleSearchCriteria),
                 HttpStatus.OK);

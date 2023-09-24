@@ -96,4 +96,4 @@ databaseChangeLog:
                   type: timestamp with time zone
                   defaultValue: now()
   - include:
-      file: changelog/0001/changelog.yaml
+      file: changelog/1.0/changelog.yaml

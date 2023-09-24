@@ -27,10 +27,10 @@ public class UserDtoResp {
     @Schema (name = "phone", description = "User phone number", example = "+375334455667")
     private String phone;
 
-    @Schema (name = "roleId", description = "User role", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
+    @Schema (name = "role", description = "Role object")
     private RoleDtoResp roleDtoResp;
 
-    @Schema (name = "levelId", description = "User level", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
+    @Schema (name = "level", description = "Level object")
     private LevelDtoResp levelDtoResp;
 
     @Schema (name = "createdAt", description = "User creation date", example = "2017-05-14T10:34")

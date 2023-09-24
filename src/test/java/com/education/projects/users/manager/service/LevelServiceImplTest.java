@@ -1,15 +1,14 @@
 package com.education.projects.users.manager.service;
 
-import com.education.projects.users.manager.entity.Level;
 import com.education.projects.users.manager.dto.request.LevelPage;
 import com.education.projects.users.manager.dto.request.LevelSearchCriteria;
-import com.education.projects.users.manager.exception.EmptyException;
+import com.education.projects.users.manager.dto.response.LevelDtoResp;
+import com.education.projects.users.manager.entity.Level;
 import com.education.projects.users.manager.exception.LevelNotFoundException;
 import com.education.projects.users.manager.mapper.LevelMapper;
 import com.education.projects.users.manager.repository.LevelCriteriaRepository;
 import com.education.projects.users.manager.repository.LevelRepository;
-import com.education.projects.users.manager.dto.response.LevelDtoResp;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,9 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LevelServiceImplTest {
@@ -110,21 +112,6 @@ class LevelServiceImplTest {
         when(levelMapper.levelListToLevelDtoList(levelList)).thenReturn(levelResp);
 
         assertEquals(levelRespExp, levelService.getAllLevels());
-    }
-
-    /**
-     * Tests for an unsuccessful result of getting all Levels
-     */
-    @Test
-    void getAllLevelsOnFail() {
-        List<LevelDtoResp> levelResp = new ArrayList<>();
-
-        List<Level> levelList = new ArrayList<>();
-
-        when(levelRepository.findAll()).thenReturn(levelList);
-        when(levelMapper.levelListToLevelDtoList(levelList)).thenReturn(levelResp);
-
-        assertThrows(EmptyException.class, () -> levelService.getAllLevels());
     }
 
     /**

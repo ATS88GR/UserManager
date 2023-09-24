@@ -1,9 +1,9 @@
 package com.education.projects.users.manager.repository;
 
-import com.education.projects.users.manager.dto.response.UserDtoResp;
-import com.education.projects.users.manager.entity.User;
 import com.education.projects.users.manager.dto.request.UserPage;
 import com.education.projects.users.manager.dto.request.UserSearchCriteria;
+import com.education.projects.users.manager.dto.response.UserDtoResp;
+import com.education.projects.users.manager.entity.User;
 import com.education.projects.users.manager.mapper.UserMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -12,7 +12,11 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -47,7 +51,7 @@ public class UserCriteriaRepository {
 
         Pageable pageable = getPageable(userPage);
 
-        long usersCount = 10;
+        long usersCount = getUsersCount();
 
         return (new PageImpl<>(
                 userMapper.userListToUserDtoList(typedQuery.getResultList()),
@@ -55,7 +59,7 @@ public class UserCriteriaRepository {
                 usersCount));
     }
 
-    private long getUsersCount(Predicate predicate) {
+    private long getUsersCount() {
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         Root<User> countRoot = countQuery.from(User.class);
         countQuery.select(criteriaBuilder.count(countRoot));
@@ -84,12 +88,6 @@ public class UserCriteriaRepository {
         if(Objects.nonNull(userSearchCriteria.getLastName()))
             predicates.add(criteriaBuilder.like(userRoot.get("lastName"),
                     "%" + userSearchCriteria.getLastName() + "%"));
-        if(Objects.nonNull(userSearchCriteria.getRole()))
-            predicates.add(criteriaBuilder.equal(userRoot.get("role"),
-                    userSearchCriteria.getRole()));
-        if(Objects.nonNull(userSearchCriteria.getLevel()))
-            predicates.add(criteriaBuilder.equal(userRoot.get("level"),
-                    userSearchCriteria.getLevel()));
         return criteriaBuilder.and(predicates.toArray((new Predicate[0])));
     }
 }

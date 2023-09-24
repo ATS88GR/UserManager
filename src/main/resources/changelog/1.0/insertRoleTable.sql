@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset ART:0001-01
+--changeset ART:1.0-01
 
 INSERT INTO user_roles
 (roledescr)
