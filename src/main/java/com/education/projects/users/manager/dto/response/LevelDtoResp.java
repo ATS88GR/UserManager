@@ -15,6 +15,6 @@ public class LevelDtoResp {
     @Schema(name = "id", description = "Level id", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
     private UUID id;
 
-    @Schema (name = "levelDescr", description = "Description of the level", example = "phd")
+    @Schema(name = "levelDescr", description = "Description of the level", example = "phd")
     private String levelDescr;
 }

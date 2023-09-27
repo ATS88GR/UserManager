@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserPage extends CommonPage {
-    UserPage() {
+    public UserPage() {
         super("lastName");
     }
 

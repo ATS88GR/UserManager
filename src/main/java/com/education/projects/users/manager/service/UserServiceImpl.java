@@ -99,10 +99,6 @@ public class UserServiceImpl implements UserService {
                     new RoleDtoResp(user.getRole().getId(), user.getRole().getRoleDescr()),
                     new LevelDtoResp(user.getLevel().getId(), user.getLevel().getLevelDescr()));
         }
-        return getAnonymousUser();
-    }
-
-    private UserDtoResp getAnonymousUser() {
         Collection<RoleDtoResp> allRoles = roleServiceImpl.getAllRoles();
         RoleDtoResp anonymous = null;
         for (RoleDtoResp roleDtoResp : allRoles) {

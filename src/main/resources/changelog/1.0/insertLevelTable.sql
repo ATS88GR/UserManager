@@ -4,6 +4,6 @@
 INSERT INTO user_levels
 (leveldescr)
 VALUES
-     ('amatueur'),
+     ('amateur'),
      ('phd candidate'),
      ('phd');

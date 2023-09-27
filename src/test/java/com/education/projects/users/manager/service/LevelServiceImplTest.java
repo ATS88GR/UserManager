@@ -89,7 +89,6 @@ class LevelServiceImplTest {
                 new LevelDtoResp(UUID.fromString("7287e720-6507-4349-893f-42b41ac5b4ac"),
                         "medium"));
 
-
         List<LevelDtoResp> levelResp = new ArrayList<>();
         levelResp.add(
                 new LevelDtoResp(UUID.fromString("0994da2b-8439-4843-80e6-69ee7489a3b7"),
@@ -98,7 +97,6 @@ class LevelServiceImplTest {
                 new LevelDtoResp(UUID.fromString("7287e720-6507-4349-893f-42b41ac5b4ac"),
                         "medium"));
 
-
         List<Level> levelList = new ArrayList<>();
         levelList.add(
                 new Level(UUID.fromString("0994da2b-8439-4843-80e6-69ee7489a3b7"),
@@ -106,7 +104,6 @@ class LevelServiceImplTest {
         levelList.add(
                 new Level(UUID.fromString("7287e720-6507-4349-893f-42b41ac5b4ac"),
                         "medium"));
-
 
         when(levelRepository.findAll()).thenReturn(levelList);
         when(levelMapper.levelListToLevelDtoList(levelList)).thenReturn(levelResp);
@@ -168,7 +165,7 @@ class LevelServiceImplTest {
      * @throws Exception
      */
     @Test
-    void getSortFilterPaginLevels() throws Exception {
+    void getSortFilterPaginLevels() {
         Page<LevelDtoResp> pageLevelDtoRespExp = mock(Page.class);
         LevelPage levelPage = new LevelPage();
         LevelSearchCriteria levelSearchCriteria = new LevelSearchCriteria("phd");
