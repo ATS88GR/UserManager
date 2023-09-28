@@ -119,9 +119,6 @@ class LevelServiceImplTest {
     @Test
     void getLevelDtoById() throws Exception {
         UUID testUUID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        LevelDtoResp levelDtoRespTest = new LevelDtoResp();
-        levelDtoRespTest.setId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
-        levelDtoRespTest.setLevelDescr("phd");
 
         LevelDtoResp levelDtoRespExp = new LevelDtoResp();
         levelDtoRespExp.setId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
@@ -136,7 +133,7 @@ class LevelServiceImplTest {
 
         when(levelRepository.existsById(testUUID)).thenReturn(true);
         when(levelRepository.getReferenceById(testUUID)).thenReturn(level);
-        when(levelMapper.levelToLevelDto(level)).thenReturn(levelDtoRespTest);
+        when(levelMapper.levelToLevelDto(level)).thenReturn(levelDtoRespExp);
         LevelDtoResp testResult = levelService.getLevelDtoById(testUUID);
 
         verify(levelRepository).existsById(testUUID);
@@ -151,7 +148,7 @@ class LevelServiceImplTest {
      * Tests for an unsuccessful result of getting a Level dto by id
      */
     @Test
-    void getLevelDtoByIdOnFail(){
+    void getLevelDtoByIdOnFail() {
         UUID testUUID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
         when(levelRepository.existsById(testUUID)).thenReturn(false);

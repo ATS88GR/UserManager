@@ -81,9 +81,6 @@ class RoleServiceImplTest {
     @Test
     void getRoleDtoById() throws Exception {
         UUID testUUID = UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        RoleDtoResp roleDtoRespTest = new RoleDtoResp();
-        roleDtoRespTest.setId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
-        roleDtoRespTest.setRoleDescr("moderator");
 
         RoleDtoResp roleDtoRespExp = new RoleDtoResp();
         roleDtoRespExp.setId(UUID.fromString("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
@@ -98,7 +95,7 @@ class RoleServiceImplTest {
 
         when(roleRepository.existsById(testUUID)).thenReturn(true);
         when(roleRepository.getReferenceById(testUUID)).thenReturn(role);
-        when(roleMapper.roleToRoleDto(role)).thenReturn(roleDtoRespTest);
+        when(roleMapper.roleToRoleDto(role)).thenReturn(roleDtoRespExp);
         RoleDtoResp testResult = roleService.getRoleDtoById(testUUID);
 
         verify(roleRepository).existsById(testUUID);
