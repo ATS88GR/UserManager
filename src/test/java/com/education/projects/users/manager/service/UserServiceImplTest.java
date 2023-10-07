@@ -13,6 +13,7 @@ import com.education.projects.users.manager.exception.UserNotFoundException;
 import com.education.projects.users.manager.mapper.UserMapper;
 import com.education.projects.users.manager.repository.UserCriteriaRepository;
 import com.education.projects.users.manager.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,6 +52,106 @@ class UserServiceImplTest {
     @InjectMocks
     UserServiceImpl userService;
 
+    private final UUID uuidUserTest = UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4");
+
+    private final UserDtoReq userDtoReqTest = new UserDtoReq(
+            "John",
+            "Smith",
+            "Gib5!?jEs#",
+            "abcdefg@gmail.com",
+            "+375334455667",
+            UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
+            UUID.fromString("086d792e-7974-4fe4-b2e0-2dba9f79bed8"));
+
+    private final Role roleExp = new Role(
+            UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
+            "moderator");
+    private final Level levelExp = new Level(
+            UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
+            "amateur");
+    private final User userExp = new User(
+            null,
+            "John",
+            "Smith",
+            "Gib5!?jEs#",
+            "abcdefg@gmail.com",
+            "+375334455667",
+            Timestamp.valueOf("2023-09-23 01:54:24"),
+            Timestamp.valueOf("2023-09-23 01:54:24"),
+            roleExp,
+            levelExp);
+    private final User userExp2 = new User(
+            null,
+            "John",
+            "Smith",
+            "Gib5!?jEs#",
+            "abcdefg@gmail.com",
+            "+375334455667",
+            Timestamp.valueOf("2023-09-23 01:54:24"),
+            Timestamp.valueOf("2023-09-23 01:54:24"),
+            roleExp,
+            levelExp);
+    private final RoleDtoResp roleDtoRespExp = new RoleDtoResp(
+            UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
+            "moderator");
+    private final LevelDtoResp levelDtoRespExp = new LevelDtoResp(
+            UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
+            "amateur");
+    private final UserDtoResp userDtoRespExp = new UserDtoResp(
+            UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
+            "John",
+            "Smith",
+            "Gib5!?jEs#",
+            "abcdefg@gmail.com",
+            "+375334455667",
+            roleDtoRespExp,
+            levelDtoRespExp,
+            Timestamp.valueOf("2023-09-23 01:54:24"),
+            Timestamp.valueOf("2023-09-23 01:54:24"));
+
+    private final UserDtoResp userDtoRespExp2 = new UserDtoResp(
+            UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
+            "John",
+            "Smith",
+            "Gib5!?jEs#",
+            "abcdefg@gmail.com",
+            "+375334455667",
+            roleDtoRespExp,
+            levelDtoRespExp,
+            Timestamp.valueOf("2023-09-23 01:54:24"),
+            Timestamp.valueOf("2023-09-24 00:00:00"));
+
+    private final RoleDtoResp roleDtoResp = new RoleDtoResp(
+            UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
+            "moderator");
+    private final LevelDtoResp levelDtoResp = new LevelDtoResp(
+            UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
+            "amateur");
+    private final UserDtoResp userDtoResp = new UserDtoResp(
+            UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
+            "John",
+            "Smith",
+            "Gib5!?jEs#",
+            "abcdefg@gmail.com",
+            "+375334455667",
+            roleDtoResp,
+            levelDtoResp,
+            Timestamp.valueOf("2023-09-23 01:54:24"),
+            Timestamp.valueOf("2023-09-23 01:54:24"));
+
+    @BeforeEach
+    public void setUp() {
+        userExp.setId(null);
+        userExp.setCreatedAt(Timestamp.valueOf("2023-09-23 01:54:24"));
+        userExp.setModificationAt(Timestamp.valueOf("2023-09-23 01:54:24"));
+
+        userExp2.setId(UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"));
+        userExp2.setCreatedAt(Timestamp.valueOf("2023-09-23 01:54:24"));
+        userExp2.setModificationAt(Timestamp.valueOf("2023-09-23 01:54:24"));
+
+        userDtoRespExp.setModificationAt(Timestamp.valueOf("2023-09-23 01:54:24"));
+    }
+
     /**
      * Test for a successful result of creating a new User
      *
@@ -58,70 +159,9 @@ class UserServiceImplTest {
      */
     @Test
     void createUser() throws Exception {
-        UserDtoReq userDtoReqTest = new UserDtoReq(
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                UUID.fromString("086d792e-7974-4fe4-b2e0-2dba9f79bed8"));
-
-        Role roleExp = new Role(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        Level levelExp = new Level(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        User userExp = new User(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                roleExp,
-                levelExp);
-
         when(roleService.getRoleById(userDtoReqTest.getRoleId())).thenReturn(roleExp);
         when(levelService.getLevelById(userDtoReqTest.getLevelId())).thenReturn(levelExp);
         when(userMapper.userDtoToUser(userDtoReqTest, roleExp, levelExp)).thenReturn(userExp);
-
-        User user = userMapper.userDtoToUser(userDtoReqTest, roleExp, levelExp);
-
-        assertEquals(UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"), user.getId());
-
-        User userExp2 = new User(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                roleExp,
-                levelExp);
-
-        RoleDtoResp roleDtoRespExp = new RoleDtoResp(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        LevelDtoResp levelDtoRespExp = new LevelDtoResp(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        UserDtoResp userDtoRespExp = new UserDtoResp(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                roleDtoRespExp,
-                levelDtoRespExp,
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-23 01:54:24"));
 
         when(userRepository.save(userExp)).thenReturn(userExp2);
         when(userMapper.userToUserDto(userExp2, roleDtoRespExp, levelDtoRespExp)).thenReturn(userDtoRespExp);
@@ -149,72 +189,15 @@ class UserServiceImplTest {
      */
     @Test
     void updateUser() throws Exception {
-        UUID uuidUserTest = UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4");
-        UserDtoReq userDtoReqTest = new UserDtoReq(
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                UUID.fromString("086d792e-7974-4fe4-b2e0-2dba9f79bed8"));
-
-        Role roleExp = new Role(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        Level levelExp = new Level(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        User userExp = new User(
-                null,
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                null,
-                null,
-                roleExp,
-                levelExp);
-
         when(userRepository.existsById(uuidUserTest)).thenReturn(true);
         when(roleService.getRoleById(userDtoReqTest.getRoleId())).thenReturn(roleExp);
         when(levelService.getLevelById(userDtoReqTest.getLevelId())).thenReturn(levelExp);
         when(userMapper.userDtoToUser(userDtoReqTest, roleExp, levelExp)).thenReturn(userExp);
         userExp.setId(uuidUserTest);
         when(userRepository.getReferenceById(uuidUserTest)).thenReturn(userExp);
-        userExp.setCreatedAt(Timestamp.valueOf("2023-09-23 01:54:24"));
-        userExp.setModificationAt(Timestamp.valueOf("2023-09-23 01:54:24"));
 
-        User userExp2 = new User(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-24 00:00:00"),
-                roleExp,
-                levelExp);
-
-        RoleDtoResp roleDtoRespExp = new RoleDtoResp(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        LevelDtoResp levelDtoRespExp = new LevelDtoResp(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        UserDtoResp userDtoRespExp = new UserDtoResp(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                roleDtoRespExp,
-                levelDtoRespExp,
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-24 00:00:00"));
+        userExp2.setModificationAt(Timestamp.valueOf("2023-09-24 00:00:00"));
+        userDtoRespExp.setModificationAt(Timestamp.valueOf("2023-09-24 00:00:00"));
 
         when(userRepository.save(userExp)).thenReturn(userExp2);
         when(userMapper.userToUserDto(userExp2, roleDtoRespExp, levelDtoRespExp)).thenReturn(userDtoRespExp);
@@ -244,19 +227,7 @@ class UserServiceImplTest {
      */
     @Test
     void updateUserWithFail() {
-        UUID uuidUserTest = UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4");
-
-        UserDtoReq userDtoReqTest = new UserDtoReq(
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                UUID.fromString("086d792e-7974-4fe4-b2e0-2dba9f79bed8"));
-
         when(userRepository.existsById(uuidUserTest)).thenReturn(false);
-
         assertThrows(UserNotFoundException.class, () -> userService.updateUser(userDtoReqTest, uuidUserTest));
     }
 
@@ -265,53 +236,16 @@ class UserServiceImplTest {
      */
     @Test
     void getAllUsers() {
-        Role roleExp = new Role(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        Level levelExp = new Level(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        User userExp = new User(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                roleExp,
-                levelExp);
+        userExp.setId(UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"));
 
-        Role roleExp2 = new Role(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        Level levelExp2 = new Level(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        User userExp2 = new User(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-24 00:00:00"),
-                roleExp2,
-                levelExp2);
+        userExp2.setId(UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"));
+        userExp2.setModificationAt(Timestamp.valueOf("2023-09-24 00:00:00"));
 
         List<User> userList = new ArrayList<>();
         userList.add(userExp);
         userList.add(userExp2);
 
-        RoleDtoResp roleDtoResp = new RoleDtoResp(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        LevelDtoResp levelDtoResp = new LevelDtoResp(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        UserDtoResp userDtoResp = new UserDtoResp(
+        UserDtoResp userDtoResp2 = new UserDtoResp(
                 UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
                 "John",
                 "Smith",
@@ -321,65 +255,11 @@ class UserServiceImplTest {
                 roleDtoResp,
                 levelDtoResp,
                 Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-23 01:54:24"));
-
-        RoleDtoResp roleDtoResp2 = new RoleDtoResp(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        LevelDtoResp levelDtoResp2 = new LevelDtoResp(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        UserDtoResp userDtoResp2 = new UserDtoResp(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                roleDtoResp2,
-                levelDtoResp2,
-                Timestamp.valueOf("2023-09-23 01:54:24"),
                 Timestamp.valueOf("2023-09-24 00:00:00"));
 
         List<UserDtoResp> userDtoRespList = new ArrayList<>();
         userDtoRespList.add(userDtoResp);
         userDtoRespList.add(userDtoResp2);
-
-        RoleDtoResp roleDtoRespExp = new RoleDtoResp(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        LevelDtoResp levelDtoRespExp = new LevelDtoResp(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        UserDtoResp userDtoRespExp = new UserDtoResp(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                roleDtoRespExp,
-                levelDtoRespExp,
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-23 01:54:24"));
-
-        RoleDtoResp roleDtoRespExp2 = new RoleDtoResp(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        LevelDtoResp levelDtoRespExp2 = new LevelDtoResp(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        UserDtoResp userDtoRespExp2 = new UserDtoResp(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                roleDtoRespExp2,
-                levelDtoRespExp2,
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-24 00:00:00"));
 
         List<UserDtoResp> userDtoRespExpList = new ArrayList<>();
         userDtoRespExpList.add(userDtoRespExp);
@@ -396,7 +276,6 @@ class UserServiceImplTest {
      */
     @Test
     void getUserById() {
-        UUID uuidUserTest = UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4");
         RoleDtoResp roleDtoRespTest = new RoleDtoResp(
                 UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
                 "moderator");
@@ -404,65 +283,13 @@ class UserServiceImplTest {
                 UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
                 "amateur");
 
-        Role roleExp = new Role(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        Level levelExp = new Level(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        User userExp = new User(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-24 00:00:00"),
-                roleExp,
-                levelExp);
-
-        RoleDtoResp roleDtoResp = new RoleDtoResp(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        LevelDtoResp levelDtoResp = new LevelDtoResp(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        UserDtoResp userDtoResp = new UserDtoResp(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                roleDtoResp,
-                levelDtoResp,
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-24 00:00:00"));
-
-        RoleDtoResp roleDtoRespExp = new RoleDtoResp(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
-        LevelDtoResp levelDtoRespExp = new LevelDtoResp(
-                UUID.fromString("2842d7f9-83bd-4df7-bcbe-1d66a69dc5e3"),
-                "amateur");
-        UserDtoResp userDtoRespExp = new UserDtoResp(
-                UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"),
-                "John",
-                "Smith",
-                "Gib5!?jEs#",
-                "abcdefg@gmail.com",
-                "+375334455667",
-                roleDtoRespExp,
-                levelDtoRespExp,
-                Timestamp.valueOf("2023-09-23 01:54:24"),
-                Timestamp.valueOf("2023-09-24 00:00:00"));
+        userExp.setId(UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4"));
 
         when(userRepository.existsById(uuidUserTest)).thenReturn(true);
         when(userRepository.getReferenceById(uuidUserTest)).thenReturn(userExp);
-        when(userMapper.userToUserDto(userExp, roleDtoRespTest, levelDtoRespTest)).thenReturn(userDtoResp);
+        when(userMapper.userToUserDto(userExp, roleDtoRespTest, levelDtoRespTest)).thenReturn(userDtoRespExp);
 
-        assertEquals(userDtoRespExp, userService.getUserById(uuidUserTest));
+        assertEquals(userDtoResp, userService.getUserById(uuidUserTest));
     }
 
     /**
@@ -470,15 +297,11 @@ class UserServiceImplTest {
      */
     @Test
     void getUserByIdOnFail() {
-
-        UUID uuidUserTest = UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4");
         Collection<RoleDtoResp> roleDtoRespList = new ArrayList<>();
-        RoleDtoResp roleDtoResp = new RoleDtoResp(
+
+        RoleDtoResp roleDtoResp2 = new RoleDtoResp(
                 UUID.fromString("48a2019d-d925-442b-8b8f-930c8f2420d6"),
                 "system admin");
-        RoleDtoResp roleDtoResp2 = new RoleDtoResp(
-                UUID.fromString("83231afa-8702-4a11-b1a5-7aaa90845c86"),
-                "moderator");
         RoleDtoResp roleDtoResp3 = new RoleDtoResp(
                 UUID.fromString("f0cb5357-f61d-4639-8f70-8622340158b5"),
                 "user");
@@ -511,8 +334,6 @@ class UserServiceImplTest {
      */
     @Test
     void deleteUserById() throws Exception {
-        UUID uuidUserTest = UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4");
-
         when(userRepository.existsById(uuidUserTest)).thenReturn(true);
         userService.deleteUserById(uuidUserTest);
 
@@ -524,8 +345,6 @@ class UserServiceImplTest {
      */
     @Test
     void deleteUserByIdOnFail() {
-        UUID uuidUserTest = UUID.fromString("4fc4200c-0fd8-409e-9d61-5862d306b4a4");
-
         when(userRepository.existsById(uuidUserTest)).thenReturn(false);
 
         assertThrows(UserNotFoundException.class, () -> userService.deleteUserById(uuidUserTest));

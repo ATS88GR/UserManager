@@ -251,9 +251,6 @@ public class UserControllerTest {
         Page<UserDtoResp> pageUserDtoRespExp = mock(Page.class);
 
         UserPage userPage = new UserPage();
-        userPage.setPageNumber(0);
-        userPage.setSortBy(String.valueOf(Sort.Direction.ASC));
-        userPage.setPageSize(5);
         userPage.setSortBy("firstName");
 
         UserSearchCriteria userSearchCriteria = new UserSearchCriteria();
