@@ -1,15 +1,12 @@
 package com.education.projects.users.manager.testController;
 
 import com.education.projects.users.manager.dto.request.UserDtoReq;
-import com.education.projects.users.manager.dto.request.UserPage;
-import com.education.projects.users.manager.dto.request.UserSearchCriteria;
 import com.education.projects.users.manager.dto.response.UserDtoResp;
 import com.education.projects.users.manager.entity.Level;
 import com.education.projects.users.manager.entity.Role;
 import com.education.projects.users.manager.entity.User;
 import com.education.projects.users.manager.repository.LevelRepository;
 import com.education.projects.users.manager.repository.RoleRepository;
-import com.education.projects.users.manager.repository.UserCriteriaRepository;
 import com.education.projects.users.manager.repository.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -17,25 +14,19 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.List;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
@@ -82,8 +73,6 @@ public class UserControllerTest {
     LevelRepository levelRepository;
     @Autowired
     RoleRepository roleRepository;
-    @Mock
-    UserCriteriaRepository userCriteriaRepository;
 
     private final User user = new User(
             null,
@@ -150,7 +139,8 @@ public class UserControllerTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .when().body(userDtoReq)
+                .when()
+                .body(userDtoReq)
                 .post("/users")
                 .then()
                 .log().all()
@@ -172,7 +162,8 @@ public class UserControllerTest {
 
         given()
                 .contentType(ContentType.JSON)
-                .when().body(userDtoReq).pathParams("id", id)
+                .when().body(userDtoReq)
+                .pathParams("id", id)
                 .put("/users/{id}")
                 .then()
                 .log().all()
@@ -194,7 +185,8 @@ public class UserControllerTest {
         UUID idTest = userRepository.save(user2).getId();
 
         given()
-                .when().body(userDtoReq).pathParams("id", idTest)
+                .when()
+                .pathParams("id", idTest)
                 .get("/users/{id}")
                 .then()
                 .log().all()
@@ -216,7 +208,8 @@ public class UserControllerTest {
         UUID idTest = userRepository.save(user2).getId();
 
         given()
-                .when().body(userDtoReq).pathParams("id", idTest)
+                .when().body(userDtoReq)
+                .pathParams("id", idTest)
                 .delete("/users/{id}")
                 .then()
                 .log().all()
@@ -238,7 +231,8 @@ public class UserControllerTest {
 
 
         given()
-                .when().body(userDtoReq).pathParams("id", idTest)
+                .when().body(userDtoReq)
+                .pathParams("id", idTest)
                 .delete("/users/{id}")
                 .then()
                 .log().all()
@@ -248,18 +242,6 @@ public class UserControllerTest {
     }
     @Test
     void getSortFilterUsersWithPagination(){
-        Page<UserDtoResp> pageUserDtoRespExp = mock(Page.class);
-
-        UserPage userPage = new UserPage();
-        userPage.setSortBy("firstName");
-
-        UserSearchCriteria userSearchCriteria = new UserSearchCriteria();
-        userSearchCriteria.setFirstName("John");
-        userSearchCriteria.setLastName("Smith");
-
-        when(userCriteriaRepository.findAllWithFilters(
-                userPage, userSearchCriteria)).thenReturn(pageUserDtoRespExp);
-
         user.setRole(getRoleByDescr("moderator"));
         user.setLevel(getLevelByDescr("amateur"));
 
@@ -272,29 +254,30 @@ public class UserControllerTest {
         given()
                 .contentType(ContentType.JSON)
                 .when()
+                .queryParam("sortBy", "firstName")
+                .queryParam("firstName", "John")
+                .queryParam("lastName", "Smith")
                 .get("/sortedFilteredUsers")
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("content", hasSize(2));
+                .body("content", hasSize(1));
     }
 
 
     private Role getRoleByDescr(String descr) {
-        List<Role> allRoles = roleRepository.findAll();
-        Role result = null;
-        for (Role role : allRoles)
-            if (role.getRoleDescr().equals(descr))
-                result = role;
-        return result;
+        return roleRepository.findAll()
+                .stream()
+                .filter(role -> role.getRoleDescr().equals(descr))
+                .findFirst()
+                .get();
     }
 
     private Level getLevelByDescr(String descr) {
-        List<Level> allLevels = levelRepository.findAll();
-        Level result = null;
-        for (Level level : allLevels)
-            if (level.getLevelDescr().equals(descr))
-                result = level;
-        return result;
+        return levelRepository.findAll()
+                .stream()
+                .filter(level -> level.getLevelDescr().equals(descr))
+                .findFirst()
+                .get();
     }
 }

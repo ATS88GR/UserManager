@@ -1,15 +1,13 @@
 package com.education.projects.users.manager.testController;
 
-import com.education.projects.users.manager.dto.response.LevelDtoResp;
-import com.education.projects.users.manager.repository.LevelCriteriaRepository;
-import com.education.projects.users.manager.repository.LevelRepository;
+import com.education.projects.users.manager.dto.response.RoleDtoResp;
+import com.education.projects.users.manager.repository.RoleRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -25,7 +23,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
-public class LevelControllerTest {
+public class RoleControllerTest {
     @LocalServerPort
     private Integer port;
 
@@ -49,51 +47,51 @@ public class LevelControllerTest {
         RestAssured.baseURI = "http://localhost:" + port;
     }
     @Autowired
-    LevelRepository levelRepository;
+    RoleRepository roleRepository;
 
     @Test
-    void getAllLevels() {
+    void getAllRoles() {
         given()
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/levels")
+                .get("/roles")
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body(".", hasSize(3));
+                .body(".", hasSize(4));
     }
     @Test
-    void getSortFilterPaginLevels() {
+    void getSortFilterPaginRoles() {
         given()
                 .contentType(ContentType.JSON)
                 .when()
-                .queryParam("levelDescr", "phd")
-                .get("/sortedFilteredLevels")
+                .queryParam("roleDescr", "user")
+                .get("/sortedFilteredRoles")
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("content", hasSize(2));
+                .body("content", hasSize(1));
     }
     @Test
-    void getLevelById(){
-        UUID levelUUIDTest = levelRepository
+    void getRolesById(){
+        UUID roleUUIDTest = roleRepository
                 .findAll()
                 .stream()
-                .filter(level -> level.getLevelDescr().equals("phd"))
+                .filter(role -> role.getRoleDescr().equals("user"))
                 .findFirst()
                 .get()
                 .getId();
 
         given()
                 .when()
-                .pathParams("id", levelUUIDTest)
-                .get("/levels/{id}")
+                .pathParams("id", roleUUIDTest)
+                .get("/roles/{id}")
                 .then()
                 .log().all()
                 .statusCode(200)
                 .and()
                 .contentType(ContentType.JSON)
-                .extract().body().as(LevelDtoResp.class);
+                .extract().body().as(RoleDtoResp.class);
 
     }
 }

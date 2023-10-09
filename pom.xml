@@ -113,7 +113,6 @@
     </dependencyManagement>
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -157,9 +156,6 @@
                     <outputChangeLogFile>src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>
                 </configuration>
             </plugin>
-
-            <!-- ... -->
-
         </plugins>
     </build>
 </project>
