@@ -14,7 +14,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDtoReq {
-
     @Schema (name = "firstName", description = "User firstname", example = "John")
     @NotBlank (message = "FirstName should not be blank")
     @Size(min = 1, max = 32, message = "32 characters max")
@@ -27,7 +26,7 @@ public class UserDtoReq {
 
     @Schema (name = "password", description = "User password", example = "Gib5!?jEs#")
     @NotBlank (message = "Password should not be blank")
-    @Size(min = 1, max = 32, message = "32 characters max")
+    @Size(min = 8, max = 32, message = "32 characters max")
     private String password;
 
     @Schema (name = "email", description = "User email", example = "abcdefg@gmail.com")

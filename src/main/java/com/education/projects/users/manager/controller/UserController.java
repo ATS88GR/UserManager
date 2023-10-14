@@ -36,7 +36,12 @@ public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-    @Operation(summary = "Creates new row in database with user information",
+    @GetMapping("/")
+    public String home(){
+        return ("<h1> Welcome </h1>");
+    }
+
+ /*   @Operation(summary = "Creates new row in database with user information",
             description = "Returns created user information from database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully created"),
@@ -48,7 +53,7 @@ public class UserController {
             throws Exception {
         log.info("Create user: {}", userDtoReq);
         return new ResponseEntity<>(userServiceImpl.createUser(userDtoReq), HttpStatus.CREATED);
-    }
+    }*/
 
     @Operation(summary = "Updates user information by id",
             description = "Returns updated user information from database")
