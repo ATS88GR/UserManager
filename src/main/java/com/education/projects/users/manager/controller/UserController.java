@@ -36,16 +36,12 @@ public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-    @GetMapping("/")
-    public String home(){
-        return ("<h1> Welcome </h1>");
-    }
-
- /*   @Operation(summary = "Creates new row in database with user information",
+    @Operation(summary = "Creates new row in database with user information",
             description = "Returns created user information from database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully created"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have permission"),
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @PostMapping("/users")  //url
@@ -53,13 +49,14 @@ public class UserController {
             throws Exception {
         log.info("Create user: {}", userDtoReq);
         return new ResponseEntity<>(userServiceImpl.createUser(userDtoReq), HttpStatus.CREATED);
-    }*/
+    }
 
     @Operation(summary = "Updates user information by id",
             description = "Returns updated user information from database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "404", description = "Not found - The user was not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have permission"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
@@ -77,6 +74,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have permission"),
             @ApiResponse(responseCode = "404", description = "User list is empty"),
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
@@ -91,6 +89,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have permission"),
             @ApiResponse(responseCode = "404", description = "User list is empty"),
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
@@ -107,6 +106,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have permission"),
             @ApiResponse(responseCode = "404", description = "Not found - The user was not found"),
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
@@ -122,6 +122,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "403", description = "Forbidden, you do not have permission"),
             @ApiResponse(responseCode = "404", description = "Not found - The user was not found"),
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })

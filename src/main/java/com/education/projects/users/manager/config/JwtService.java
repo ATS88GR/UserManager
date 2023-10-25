@@ -18,14 +18,10 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    //@Value("${application.properties.security.jwt.secret-key}")
-    private String secretKey="30679417f70d91b967e10720777ba4204fb45b5027ff1517ad59287d0d50e877";
-    //@Value("${application.properties.security.jwt.expiration}")
-    private long jwtExpiration=86400000;
-    //@Value("${application.properties.security.jwt.refresh-token.expiration}")
-    private long refreshExpiration=604800000;
-
-    //private static final String SECRET_KEY = "30679417f70d91b967e10720777ba4204fb45b5027ff1517ad59287d0d50e877";
+    @Value("${application.security.jwt.secret-key}")
+    private String secretKey;
+    @Value("${application.security.jwt.expiration}")
+    private long jwtExpiration;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -44,20 +40,7 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    public String generateRefreshToken(
-            UserDetails userDetails
-    ) {
-        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+        return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
     private String buildToken(

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RolePage extends CommonPage {
-    public RolePage(){
+    public RolePage() {
         super("roleDescr");
     }
 

@@ -14,8 +14,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LevelSearchCriteria {
 
-    @Schema (name = "levelDescr", description = "Level description", example = "phd")
-    @NotBlank (message = "Level description should not be blank")
+    @Schema(name = "levelDescr", description = "Level description", example = "phd")
+    @NotBlank(message = "Level description should not be blank")
     @Size(min = 1, max = 32, message = "32 characters max")
     private String levelDescr;
 }

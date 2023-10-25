@@ -1,5 +1,6 @@
 package com.education.projects.users.manager.testController;
 
+import com.education.projects.users.manager.dto.request.AuthenticationRequest;
 import com.education.projects.users.manager.dto.request.UserDtoReq;
 import com.education.projects.users.manager.dto.response.UserDtoResp;
 import com.education.projects.users.manager.entity.Level;
@@ -38,34 +39,6 @@ public class UserControllerTest {
     @ServiceConnection
     static PostgreSQLContainer<?> postgres =
             new PostgreSQLContainer<>("postgres:15");
-
-    @BeforeAll
-    static void beforeAll() {
-        postgres.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgres.stop();
-    }
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.baseURI = "http://localhost:" + port;
-        userRepository.deleteAll();
-
-        user.setId(null);
-        user.setCreatedAt(null);
-        user.setModificationAt(null);
-        user.setRole(null);
-        user.setLevel(null);
-
-        user2.setId(null);
-        user2.setCreatedAt(null);
-        user2.setModificationAt(null);
-        user2.setRole(null);
-        user2.setLevel(null);
-    }
 
     @Autowired
     UserRepository userRepository;
@@ -106,6 +79,65 @@ public class UserControllerTest {
             null,
             null);
 
+    private final UserDtoReq userForSecurity = new UserDtoReq(
+            "Sec",
+            "Secure",
+            "Security",
+            "123@gmail.com",
+            "+375255432112",
+            null,
+            null);
+
+    private String token;
+
+    @BeforeAll
+    static void beforeAll() {
+        postgres.start();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        postgres.stop();
+    }
+
+    @BeforeEach
+    void setUp() {
+        RestAssured.baseURI = "http://localhost:" + port;
+        userRepository.deleteAll();
+
+        userForSecurity.setRoleId(getRoleByDescr("system admin").getId());
+        userForSecurity.setLevelId(getLevelByDescr("phd").getId());
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userForSecurity)
+                .post("auth/register")
+                .then()
+                .log().all()
+                .statusCode(200);
+
+        token = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(new AuthenticationRequest("123@gmail.com", "Security"))
+                .post("auth/authenticate")
+                .jsonPath()
+                .getString("access_token");
+
+        user.setId(null);
+        user.setCreatedAt(null);
+        user.setModificationAt(null);
+        user.setRole(null);
+        user.setLevel(null);
+
+        user2.setId(null);
+        user2.setCreatedAt(null);
+        user2.setModificationAt(null);
+        user2.setRole(null);
+        user2.setLevel(null);
+    }
+
     @Test
     void testPostgresIsRunning() {
         assertThat(postgres.isRunning()).isTrue();
@@ -124,12 +156,13 @@ public class UserControllerTest {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/users")
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body(".", hasSize(2));
+                .body(".", hasSize(3));
     }
 
     @Test
@@ -139,6 +172,7 @@ public class UserControllerTest {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .body(userDtoReq)
                 .post("/users")
@@ -162,6 +196,7 @@ public class UserControllerTest {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
                 .when().body(userDtoReq)
                 .pathParams("id", id)
                 .put("/users/{id}")
@@ -186,6 +221,7 @@ public class UserControllerTest {
 
         given()
                 .when()
+                .header("Authorization", "Bearer " + token)
                 .pathParams("id", idTest)
                 .get("/users/{id}")
                 .then()
@@ -208,7 +244,9 @@ public class UserControllerTest {
         UUID idTest = userRepository.save(user2).getId();
 
         given()
-                .when().body(userDtoReq)
+                .when()
+                .header("Authorization", "Bearer " + token)
+                .body(userDtoReq)
                 .pathParams("id", idTest)
                 .delete("/users/{id}")
                 .then()
@@ -231,7 +269,9 @@ public class UserControllerTest {
 
 
         given()
-                .when().body(userDtoReq)
+                .when()
+                .header("Authorization", "Bearer " + token)
+                .body(userDtoReq)
                 .pathParams("id", idTest)
                 .delete("/users/{id}")
                 .then()
@@ -240,8 +280,9 @@ public class UserControllerTest {
                 .and()
                 .contentType(ContentType.JSON);
     }
+
     @Test
-    void getSortFilterUsersWithPagination(){
+    void getSortFilterUsersWithPagination() {
         user.setRole(getRoleByDescr("moderator"));
         user.setLevel(getLevelByDescr("amateur"));
 
@@ -254,6 +295,7 @@ public class UserControllerTest {
         given()
                 .contentType(ContentType.JSON)
                 .when()
+                .header("Authorization", "Bearer " + token)
                 .queryParam("sortBy", "firstName")
                 .queryParam("firstName", "John")
                 .queryParam("lastName", "Smith")

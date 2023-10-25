@@ -46,21 +46,21 @@ public class ErrorHandlingControllerAdvice {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    ResponseEntity<ErrorResponse> onUserNotFoundResponse(Exception e) {
+    ResponseEntity<ErrorResponse> onUserNotFoundResponse(UserNotFoundException e) {
         ErrorResponse error = new ErrorResponse(e.getMessage());
         log.error("Error: {}", error);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(LevelNotFoundException.class)
-    ResponseEntity<ErrorResponse> onLevelNotFoundResponse(Exception e) {
+    ResponseEntity<ErrorResponse> onLevelNotFoundResponse(LevelNotFoundException e) {
         ErrorResponse error = new ErrorResponse(e.getMessage());
         log.error("Error: {}", error);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(RoleNotFoundException.class)
-    ResponseEntity<ErrorResponse> onRoleNotFoundResponse(Exception e) {
+    ResponseEntity<ErrorResponse> onRoleNotFoundResponse(RoleNotFoundException e) {
         ErrorResponse error = new ErrorResponse(e.getMessage());
         log.error("Error: {}", error);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);

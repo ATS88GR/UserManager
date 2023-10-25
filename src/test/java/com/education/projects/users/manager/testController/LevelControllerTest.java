@@ -1,15 +1,19 @@
 package com.education.projects.users.manager.testController;
 
+import com.education.projects.users.manager.dto.request.AuthenticationRequest;
+import com.education.projects.users.manager.dto.request.UserDtoReq;
 import com.education.projects.users.manager.dto.response.LevelDtoResp;
-import com.education.projects.users.manager.repository.LevelCriteriaRepository;
+import com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.entity.Role;
 import com.education.projects.users.manager.repository.LevelRepository;
+import com.education.projects.users.manager.repository.RoleRepository;
+import com.education.projects.users.manager.repository.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -34,6 +38,26 @@ public class LevelControllerTest {
     static PostgreSQLContainer<?> postgres =
             new PostgreSQLContainer<>("postgres:15");
 
+    @Autowired
+    LevelRepository levelRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    private final UserDtoReq userForSecurity = new UserDtoReq(
+            "Sec",
+            "Secure",
+            "Security",
+            "123@gmail.com",
+            "+375255432112",
+            null,
+            null);
+
+    private String token;
+
     @BeforeAll
     static void beforeAll() {
         postgres.start();
@@ -47,26 +71,49 @@ public class LevelControllerTest {
     @BeforeEach
     void setUp() {
         RestAssured.baseURI = "http://localhost:" + port;
+
+        userRepository.deleteAll();
+
+        userForSecurity.setRoleId(getRoleByDescr("system admin").getId());
+        userForSecurity.setLevelId(getLevelByDescr("phd").getId());
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userForSecurity)
+                .post("auth/register")
+                .then()
+                .log().all()
+                .statusCode(200);
+
+        token = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(new AuthenticationRequest("123@gmail.com", "Security"))
+                .post("auth/authenticate")
+                .jsonPath()
+                .getString("access_token");
     }
-    @Autowired
-    LevelRepository levelRepository;
 
     @Test
     void getAllLevels() {
         given()
                 .contentType(ContentType.JSON)
                 .when()
+                .header("Authorization","Bearer "+ token)
                 .get("/levels")
                 .then()
                 .log().all()
                 .statusCode(200)
                 .body(".", hasSize(3));
     }
+
     @Test
     void getSortFilterPaginLevels() {
         given()
                 .contentType(ContentType.JSON)
                 .when()
+                .header("Authorization","Bearer "+ token)
                 .queryParam("levelDescr", "phd")
                 .get("/sortedFilteredLevels")
                 .then()
@@ -74,8 +121,9 @@ public class LevelControllerTest {
                 .statusCode(200)
                 .body("content", hasSize(2));
     }
+
     @Test
-    void getLevelById(){
+    void getLevelById() {
         UUID levelUUIDTest = levelRepository
                 .findAll()
                 .stream()
@@ -86,6 +134,7 @@ public class LevelControllerTest {
 
         given()
                 .when()
+                .header("Authorization","Bearer "+ token)
                 .pathParams("id", levelUUIDTest)
                 .get("/levels/{id}")
                 .then()
@@ -95,5 +144,20 @@ public class LevelControllerTest {
                 .contentType(ContentType.JSON)
                 .extract().body().as(LevelDtoResp.class);
 
+    }
+    private Role getRoleByDescr(String descr) {
+        return roleRepository.findAll()
+                .stream()
+                .filter(role -> role.getRoleDescr().equals(descr))
+                .findFirst()
+                .get();
+    }
+
+    private Level getLevelByDescr(String descr) {
+        return levelRepository.findAll()
+                .stream()
+                .filter(level -> level.getLevelDescr().equals(descr))
+                .findFirst()
+                .get();
     }
 }

@@ -8,11 +8,12 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Sort;
+
 @Getter
 @Setter
 public class CommonPage {
 
-    CommonPage(String sortBy){
+    CommonPage(String sortBy) {
         this.sortBy = sortBy;
     }
 

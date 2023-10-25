@@ -10,13 +10,13 @@ import lombok.Setter;
 @Setter
 public class UserSearchCriteria {
 
-    @Schema (name = "firstName", description = "User firstname", example = "John")
-    @NotBlank (message = "FirstName should not be blank")
+    @Schema(name = "firstName", description = "User firstname", example = "John")
+    @NotBlank(message = "FirstName should not be blank")
     @Size(min = 1, max = 32, message = "32 characters max")
     private String firstName;
 
-    @Schema (name = "lastName", description = "User lastname", example = "Smith")
-    @NotBlank (message = "LastName should not be blank")
+    @Schema(name = "lastName", description = "User lastname", example = "Smith")
+    @NotBlank(message = "LastName should not be blank")
     @Size(min = 1, max = 32, message = "32 characters max")
     private String lastName;
 }

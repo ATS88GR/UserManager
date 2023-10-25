@@ -23,9 +23,9 @@ public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
             "/auth/**",
-            "/swagger-ui/**",
-            "/swagger-ui.html/**"
-    //"/**"
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-ui/**"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -37,7 +37,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers("/*").hasAnyRole("system admin", "moderator", "user")
                                 .requestMatchers(GET, "/users/**", "/sortedFilteredUsers/").hasAnyAuthority("system admin", "moderator")
                                 .requestMatchers(POST, "/users/**", "/sortedFilteredUsers/").hasAnyAuthority("system admin", "moderator")
                                 .requestMatchers(PUT, "/users/**", "/sortedFilteredUsers/").hasAnyAuthority("system admin", "moderator")

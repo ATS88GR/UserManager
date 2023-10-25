@@ -7,10 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LevelPage extends CommonPage{
-   public LevelPage(){
-       super("levelDescr");
-   }
+public class LevelPage extends CommonPage {
+    public LevelPage() {
+        super("levelDescr");
+    }
+
     @NotBlank
     @Schema(name = "sortBy",
             description = "Sorting by levelDescr",

@@ -35,9 +35,8 @@ public class AuthenticationService {
                 .role(roleRepository.getReferenceById(request.getRoleId()))
                 .level(levelRepository.getReferenceById(request.getLevelId()))
                 .build();
-        var savedUser = userRepository.save(user);
+        userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();
@@ -53,7 +52,6 @@ public class AuthenticationService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .build();

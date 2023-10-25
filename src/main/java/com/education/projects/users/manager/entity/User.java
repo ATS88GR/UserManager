@@ -40,7 +40,7 @@ public class User implements UserDetails {
     @Column(name = "id", insertable = false)
     private UUID id;
 
-   @Column(name = "firstname", nullable = false)
+    @Column(name = "firstname", nullable = false)
     private String firstName;
 
     @Column(name = "lastname", nullable = false)
@@ -71,38 +71,33 @@ public class User implements UserDetails {
     @JoinColumn(name = "level_id", referencedColumnName = "id")
     private Level level;
 
- @Override
- public Collection<? extends GrantedAuthority> getAuthorities() {
-  return List.of(new SimpleGrantedAuthority(role.getRoleDescr()));
- }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.getRoleDescr()));
+    }
 
- @Override
- public String getPassword() {
-  return password;
- }
+    @Override
+    public String getUsername() {
+        return email;
+    }
 
- @Override
- public String getUsername() {
-  return email;
- }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
- @Override
- public boolean isAccountNonExpired() {
-  return true;
- }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
- @Override
- public boolean isAccountNonLocked() {
-  return true;
- }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
- @Override
- public boolean isCredentialsNonExpired() {
-  return true;
- }
-
- @Override
- public boolean isEnabled() {
-  return true;
- }
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

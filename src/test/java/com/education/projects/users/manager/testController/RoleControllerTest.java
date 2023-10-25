@@ -1,7 +1,13 @@
 package com.education.projects.users.manager.testController;
 
+import com.education.projects.users.manager.dto.request.AuthenticationRequest;
+import com.education.projects.users.manager.dto.request.UserDtoReq;
 import com.education.projects.users.manager.dto.response.RoleDtoResp;
+import com.education.projects.users.manager.entity.Level;
+import com.education.projects.users.manager.entity.Role;
+import com.education.projects.users.manager.repository.LevelRepository;
 import com.education.projects.users.manager.repository.RoleRepository;
+import com.education.projects.users.manager.repository.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterAll;
@@ -32,6 +38,24 @@ public class RoleControllerTest {
     static PostgreSQLContainer<?> postgres =
             new PostgreSQLContainer<>("postgres:15");
 
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    LevelRepository levelRepository;
+    @Autowired
+    UserRepository userRepository;
+
+    private final UserDtoReq userForSecurity = new UserDtoReq(
+            "Sec",
+            "Secure",
+            "Security",
+            "123@gmail.com",
+            "+375255432112",
+            null,
+            null);
+
+    private String token;
+
     @BeforeAll
     static void beforeAll() {
         postgres.start();
@@ -45,26 +69,49 @@ public class RoleControllerTest {
     @BeforeEach
     void setUp() {
         RestAssured.baseURI = "http://localhost:" + port;
+
+        userRepository.deleteAll();
+
+        userForSecurity.setRoleId(getRoleByDescr("system admin").getId());
+        userForSecurity.setLevelId(getLevelByDescr("phd").getId());
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userForSecurity)
+                .post("auth/register")
+                .then()
+                .log().all()
+                .statusCode(200);
+
+        token = given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(new AuthenticationRequest("123@gmail.com", "Security"))
+                .post("auth/authenticate")
+                .jsonPath()
+                .getString("access_token");
     }
-    @Autowired
-    RoleRepository roleRepository;
 
     @Test
     void getAllRoles() {
         given()
                 .contentType(ContentType.JSON)
                 .when()
+                .header("Authorization", "Bearer " + token)
                 .get("/roles")
                 .then()
                 .log().all()
                 .statusCode(200)
                 .body(".", hasSize(4));
     }
+
     @Test
     void getSortFilterPaginRoles() {
         given()
                 .contentType(ContentType.JSON)
                 .when()
+                .header("Authorization", "Bearer " + token)
                 .queryParam("roleDescr", "user")
                 .get("/sortedFilteredRoles")
                 .then()
@@ -72,8 +119,9 @@ public class RoleControllerTest {
                 .statusCode(200)
                 .body("content", hasSize(1));
     }
+
     @Test
-    void getRolesById(){
+    void getRolesById() {
         UUID roleUUIDTest = roleRepository
                 .findAll()
                 .stream()
@@ -84,6 +132,7 @@ public class RoleControllerTest {
 
         given()
                 .when()
+                .header("Authorization", "Bearer " + token)
                 .pathParams("id", roleUUIDTest)
                 .get("/roles/{id}")
                 .then()
@@ -93,5 +142,21 @@ public class RoleControllerTest {
                 .contentType(ContentType.JSON)
                 .extract().body().as(RoleDtoResp.class);
 
+    }
+
+    private Role getRoleByDescr(String descr) {
+        return roleRepository.findAll()
+                .stream()
+                .filter(role -> role.getRoleDescr().equals(descr))
+                .findFirst()
+                .get();
+    }
+
+    private Level getLevelByDescr(String descr) {
+        return levelRepository.findAll()
+                .stream()
+                .filter(level -> level.getLevelDescr().equals(descr))
+                .findFirst()
+                .get();
     }
 }
