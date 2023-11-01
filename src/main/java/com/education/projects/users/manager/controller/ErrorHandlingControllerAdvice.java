@@ -25,10 +25,8 @@ public class ErrorHandlingControllerAdvice {
     ResponseEntity<ValidationErrorResponse> onConstraintValidationException(
             ConstraintViolationException e) {
         ValidationErrorResponse error = new ValidationErrorResponse();
-        for (ConstraintViolation violation : e.getConstraintViolations()) {
-            error.getViolations().add(
-                    new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
-        }
+        e.getConstraintViolations().forEach(violation -> error.getViolations().add(
+                new Violation(violation.getPropertyPath().toString(), violation.getMessage())));
         log.error("Error: {}", error);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -37,10 +35,8 @@ public class ErrorHandlingControllerAdvice {
     ResponseEntity<ValidationErrorResponse> onMethodArgumentNotValidException(
             MethodArgumentNotValidException e) {
         ValidationErrorResponse error = new ValidationErrorResponse();
-        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            error.getViolations().add(
-                    new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
-        }
+        e.getBindingResult().getFieldErrors().forEach(fieldError -> error.getViolations().add(
+                new Violation(fieldError.getField(), fieldError.getDefaultMessage())));
         log.error("Error: {}", error);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }

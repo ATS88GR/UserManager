@@ -10,13 +10,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +27,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@Validated
 @Slf4j
 @Tag(name = "Users API")
 public class UserController {
@@ -44,7 +41,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Forbidden, you do not have permission"),
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
-    @PostMapping("/users")  //url
+    @PostMapping("/users")
     public ResponseEntity<UserDtoResp> createUser(@Valid @RequestBody UserDtoReq userDtoReq)
             throws Exception {
         log.info("Create user: {}", userDtoReq);
@@ -63,7 +60,7 @@ public class UserController {
     @PutMapping("/users/{id}")
     public ResponseEntity<UserDtoResp> updateUser(
             @Valid @RequestBody UserDtoReq userDtoReq,
-            @PathVariable("id") @NotNull UUID id)
+            @PathVariable("id") UUID id)
             throws Exception {
         log.info("Update user with id {}, update user info {}", id, userDtoReq);
         return new ResponseEntity<>(userServiceImpl.updateUser(userDtoReq, id), HttpStatus.OK);
@@ -94,8 +91,9 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/sortedFilteredUsers")
-    public ResponseEntity<Page<UserDtoResp>> getSortFilterUsersWithPagination(UserPage userPage,
-                                                                              UserSearchCriteria userSearchCriteria) {
+    public ResponseEntity<Page<UserDtoResp>> getSortFilterUsersWithPagination(
+            @Valid UserPage userPage,
+            @Valid UserSearchCriteria userSearchCriteria) {
         log.info("Get common sorted and filtered user info");
         return new ResponseEntity<>(userServiceImpl.getSortFilterPaginUsers(userPage, userSearchCriteria),
                 HttpStatus.OK);
@@ -112,7 +110,7 @@ public class UserController {
     })
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDtoResp> getUserById(
-            @PathVariable("id") @NotNull UUID id) {
+            @PathVariable("id") UUID id) {
         log.info("Gets user with id {}", id);
         return new ResponseEntity<>(userServiceImpl.getUserById(id), HttpStatus.OK);
     }
@@ -128,7 +126,7 @@ public class UserController {
     })
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUserById(
-            @PathVariable("id") @NotNull UUID id)
+            @PathVariable("id") UUID id)
             throws Exception {
         log.info("Deletes user with id {}", id);
         userServiceImpl.deleteUserById(id);

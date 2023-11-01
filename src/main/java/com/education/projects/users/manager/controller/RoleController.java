@@ -8,14 +8,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +21,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 @RestController
-@Validated
 @Slf4j
 @Tag(name = "Roles API")
 public class RoleController {
@@ -70,7 +66,7 @@ public class RoleController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/roles/{id}")
-    public ResponseEntity<RoleDtoResp> getRoleById(@PathVariable("id") @NotNull UUID id)
+    public ResponseEntity<RoleDtoResp> getRoleById(@PathVariable("id") UUID id)
             throws Exception {
         log.info("Gets role with id {}", id);
         return new ResponseEntity<>(roleServiceImpl.getRoleDtoById(id), HttpStatus.OK);
